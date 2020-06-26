@@ -30,8 +30,8 @@ changeFunction.config(font=("Helvetica", 12), fg=window.TEXT, bg=window.DROPDOWN
 changeFunction.grid(row=0, column=0, columnspan=2, sticky=tk.W+tk.E)
 
 """Change title on write."""
-def functionCallback():
-  root.title("Hash GUI ({})".format(hashFunction.get()))
+def functionCallback(*args):
+  root.title(f"Hash GUI ({hashFunction.get()})")
 
 hashFunction.trace("w", functionCallback)
 
@@ -39,7 +39,7 @@ hashFunction.trace("w", functionCallback)
 selectFrame = tk.Frame(root, width=window.WIDTH/2, height=window.HEIGHT, bg=window.SELECTBG).grid(row=1, column=0)
 
 """Hashing Frame."""
-hashFrame = tk.Frame(root,  width=window.WIDTH/2, height=window.HEIGHT, bg=window.HASHBG).grid(row=1, column=1)
+hashFrame = tk.Frame(root, width=window.WIDTH/2, height=window.HEIGHT, bg=window.HASHBG).grid(row=1, column=1)
 
 """Start function."""
 def start(function="SHA3-256"):
