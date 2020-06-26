@@ -1,6 +1,10 @@
 import io, os, sys, hashlib
-import references
 import tkinter as tk
+
+try:
+  import references
+except ImportError:
+  from hashgui import references
 
 resources = references.Resources()
 window = references.Window()
