@@ -27,7 +27,7 @@ hashOptions = [
 hashFunction = tk.StringVar(root)
 changeFunction = tk.OptionMenu(root, hashFunction, *hashOptions)
 changeFunction.config(font=("Helvetica", 12), fg=window.TEXT, bg=window.DROPDOWN)
-changeFunction.grid(row=0, column=0, columnspan=2, sticky=tk.W+tk.E)
+changeFunction.grid(row=0, column=0, columnspan=2, sticky="we")
 
 """Change title on write."""
 def functionCallback(*args):
@@ -36,10 +36,12 @@ def functionCallback(*args):
 hashFunction.trace("w", functionCallback)
 
 """File/Directory Select Frame."""
-selectFrame = tk.Frame(root, width=window.WIDTH/2, height=window.HEIGHT, bg=window.SELECTBG).grid(row=1, column=0)
+selectFrame = tk.LabelFrame(root, text="File/Directory Selection", font=("Calibri", 10), width=window.WIDTH/2, height=window.HEIGHT,
+  labelanchor="n", relief="sunken", fg=window.TEXT, bg=window.BACKGROUND).grid(row=1, column=0)
 
 """Hashing Frame."""
-hashFrame = tk.Frame(root, width=window.WIDTH/2, height=window.HEIGHT, bg=window.HASHBG).grid(row=1, column=1)
+hashFrame = tk.LabelFrame(root, text="Hasher", font=("Calibri", 10), width=window.WIDTH/2, height=window.HEIGHT,
+  labelanchor="n", relief="raised", fg=window.TEXT, bg=window.BACKGROUND).grid(row=1, column=1)
 
 """Start function."""
 def start(function="SHA3-256"):
@@ -47,6 +49,6 @@ def start(function="SHA3-256"):
   root.title(f"Hash GUI ({function})")
   root.mainloop()
 
-"""Start the tkinter main loop."""
+"""Start the tkinter main loop if __name__ == "__main__"."""
 if __name__ == "__main__":
   start()

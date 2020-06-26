@@ -11,8 +11,6 @@ class Window:
   ICON = "/icon.ico"
   #Colours
   BACKGROUND = "#2F2F2F"
-  SELECTBG = "#AFAFAF"
-  HASHBG = "#ACACAC"
   TEXT = "#FFFFFF"
   BUTTON = "#5F5F5F"
   DROPDOWN = "#505050"
