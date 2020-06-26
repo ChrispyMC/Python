@@ -7,10 +7,24 @@ class Window:
   GEOMETRY = "1024x768"
   WIDTH = 1024
   HEIGHT = 768
+  LABELTEXTSIZE = 10
+  BUTTONTEXTSIZE = 12
   #Assets
   ICON = "/icon.ico"
-  #Colours
   BACKGROUND = "#2F2F2F"
   TEXT = "#FFFFFF"
+  LABEL = "#303030"
   BUTTON = "#5F5F5F"
   DROPDOWN = "#505050"
+  #Light Colours
+  #  "BACKGROUND": "#FFFFFF",
+  #  "TEXT": "#000000",
+  #  "LABEL": "#AFAFAF",
+  #  "BUTTON": "#AFAFAF",
+  #  "DROPDOWN": "#A0A0A0"
+  #Dark Colours
+  #  "BACKGROUND": "#2F2F2F",
+  #  "TEXT": "#FFFFFF",
+  #  "LABEL": "#303030",
+  #  "BUTTON": "#5F5F5F",
+  #  "DROPDOWN": "#505050"
