@@ -1,4 +1,4 @@
 import hashlib
 
-def whatever():
-  print ("whatever")
+def test():
+  print("Test!")

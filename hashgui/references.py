@@ -15,6 +15,7 @@ class Window:
   TEXT = "#FFFFFF"
   LABEL = "#303030"
   BUTTON = "#5F5F5F"
+  BUTTONLIGHT = "#F0F0F0"
   DROPDOWN = "#505050"
   #Light Colours
   #  "BACKGROUND": "#FFFFFF",

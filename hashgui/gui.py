@@ -37,20 +37,20 @@ hashOptions = [
 
 """Menu commands."""
 def test():
-  print("test")
+  print("what")
 
 """Menu."""
 menuBar = tk.Menu(root)
 
 fileMenu = tk.Menu(menuBar, tearoff=0)
-fileMenu.add_command(label="Open File...", command=hasher.whatever)
+fileMenu.add_command(label="Open File...", command=hasher.test)
 fileMenu.add_command(label="Open Directory...", command=test)
 fileMenu.add_separator()
 fileMenu.add_command(label="Quit", command=root.quit)
 menuBar.add_cascade(label="File", menu=fileMenu)
 
 hashMenu = tk.Menu(menuBar, tearoff=0)
-hashMenu.add_command(label="Hash Files", command=hasher.whatever)
+hashMenu.add_command(label="Hash Files", command=hasher.test)
 hashMenu.add_command(label="Hash Directories", command=test)
 menuBar.add_cascade(label="Hash", menu=hashMenu)
 
@@ -76,23 +76,24 @@ statusBar = tk.Label(root, text="No items selected.", relief="sunken", anchor="w
 inputFrame = tk.LabelFrame(root, fg=window.TEXT, bg=window.BACKGROUND, 
   labelanchor="n", text="File/Directory Selection")
 
-inputDirButton = tk.Button(inputFrame, text="Open Directory", font=("Helvetica", window.BUTTONTEXTSIZE), command=hasher.whatever)
+inputDirButton = tk.Button(inputFrame, text="Open Directory", font=("Helvetica", window.BUTTONTEXTSIZE), 
+  bg=window.BUTTONLIGHT, command=hasher.whatever)
 inputDirButton.pack(side="top", fill="x")
 
-inputFileButton = tk.Button(inputFrame, text="Open Files", font=("Helvetica", window.BUTTONTEXTSIZE), command=hasher.whatever)
+inputFileButton = tk.Button(inputFrame, text="Open Files", font=("Helvetica", window.BUTTONTEXTSIZE), bg=window.BUTTONLIGHT, command=hasher.whatever)
 inputFileButton.pack(side="top", fill="x")
 
 #Listbox Widget
 
-removeFileButton = tk.Button(inputFrame, text="Open Files", font=("Helvetica", window.BUTTONTEXTSIZE), 
+removeFileButton = tk.Button(inputFrame, text="Remove File", font=("Helvetica", window.BUTTONTEXTSIZE), 
   fg=window.TEXT, bg=window.BUTTON, command=hasher.whatever)
 removeFileButton.pack(side="bottom", fill="x")
 
-removeDirButton = tk.Button(inputFrame, text="Open Directory", font=("Helvetica", window.BUTTONTEXTSIZE), 
+removeDirButton = tk.Button(inputFrame, text="Remove Directory", font=("Helvetica", window.BUTTONTEXTSIZE), 
   fg=window.TEXT, bg=window.BUTTON, command=hasher.whatever)
 removeDirButton.pack(side="bottom", fill="x")
 
-inputFrame.pack_propagate(0)
+inputFrame.pack_propagate(False)
 inputFrame.pack(side="left", fill="both", expand=True)
 
 
