@@ -40,7 +40,7 @@ def test():
   print("test")
 
 """Menu."""
-"""menuBar = tk.Menu(root)
+menuBar = tk.Menu(root)
 
 fileMenu = tk.Menu(menuBar, tearoff=0)
 fileMenu.add_command(label="Open File...", command=hasher.whatever)
@@ -52,43 +52,56 @@ menuBar.add_cascade(label="File", menu=fileMenu)
 hashMenu = tk.Menu(menuBar, tearoff=0)
 hashMenu.add_command(label="Hash Files", command=hasher.whatever)
 hashMenu.add_command(label="Hash Directories", command=test)
-menuBar.add_cascade(label="Hash", menu=hashMenu)"""
-#Add -> root.config(menu=menuBar) -> start()
-
-
-"""File/Directory Selection Frames."""
-####--First Column--####
-
-####--First Frame--####
-fileFrame = tk.Frame(root, width=window.WIDTH/2, height=window.HEIGHT/2, relief="sunken", bg=window.BACKGROUND).grid(row=0, column=0, rowspan=5)
-fileLabel = tk.Label(fileFrame, text="File Selection", font=("Helvetica", window.LABELTEXTSIZE)).grid(row=0, column=0)
-
-####--Second Frame--####
-directoryFrame = tk.Frame(root, width=window.WIDTH/2, height=window.HEIGHT/2, relief="raised", bg=window.BACKGROUND).grid(row=4, column=0, rowspan=5)
-directoryLabel = tk.Label(fileFrame, text="Directory Selection", font=("Helvetica", window.LABELTEXTSIZE)).grid(row=5, column=0)
-
-"""Hashing Frames."""
-####--Second Column--####
-
-####--First Frame--####
-hashFileFrame = tk.Frame(root, width=window.WIDTH/2, height=window.HEIGHT/2, relief="raised", bg=window.BACKGROUND).grid(row=0, column=1, rowspan=5)
-hashFileLabel = tk.Label(hashFileFrame, text="File Hash Output", font=("Helvetica", window.LABELTEXTSIZE)).grid(row=0, column=1)
-
-####--Second Frame--####
-hashDirFrame = tk.Frame(root, width=window.WIDTH/2, height=window.HEIGHT/2, relief="raised", bg=window.BACKGROUND).grid(row=4, column=1, rowspan=5)
-hashDirLabel = tk.Label(hashDirFrame, text="Directory Hash Output", font=("Helvetica", window.LABELTEXTSIZE)).grid(row=5, column=1)
+menuBar.add_cascade(label="Hash", menu=hashMenu)
 
 """Functions Menu."""
 hashFunction = tk.StringVar()
-changeFunction = tk.OptionMenu(hashFileFrame, hashFunction, *hashOptions)
+changeFunction = tk.OptionMenu(root, hashFunction, *hashOptions)
 changeFunction.config(font=("Helvetica", window.BUTTONTEXTSIZE), fg=window.TEXT, bg=window.DROPDOWN)
-changeFunction.grid(row=4, column=1, sticky="sew")
+changeFunction.pack(side="top", fill="x")
 
 """Change title on write."""
 def functionCallback(*args):
   root.title(f"Hash GUI ({hashFunction.get()})")
+  print(f"Switched hash function to {hashFunction.get()}.")
 
 hashFunction.trace("w", functionCallback)
+
+####--Status Bar--####
+statusBar = tk.Label(root, text="No items selected.", relief="sunken", anchor="w", font=("Helvetica", window.LABELTEXTSIZE), bd=1, 
+  fg=window.TEXT, bg=window.LABEL).pack(side="bottom", fill="x")
+
+####--Input List Frame--####
+"""Left Frame."""
+inputFrame = tk.LabelFrame(root, fg=window.TEXT, bg=window.BACKGROUND, 
+  labelanchor="n", text="File/Directory Selection")
+
+inputDirButton = tk.Button(inputFrame, text="Open Directory", font=("Helvetica", window.BUTTONTEXTSIZE), command=hasher.whatever)
+inputDirButton.pack(side="top", fill="x")
+
+inputFileButton = tk.Button(inputFrame, text="Open Files", font=("Helvetica", window.BUTTONTEXTSIZE), command=hasher.whatever)
+inputFileButton.pack(side="top", fill="x")
+
+#Listbox Widget
+
+removeFileButton = tk.Button(inputFrame, text="Open Files", font=("Helvetica", window.BUTTONTEXTSIZE), 
+  fg=window.TEXT, bg=window.BUTTON, command=hasher.whatever)
+removeFileButton.pack(side="bottom", fill="x")
+
+removeDirButton = tk.Button(inputFrame, text="Open Directory", font=("Helvetica", window.BUTTONTEXTSIZE), 
+  fg=window.TEXT, bg=window.BUTTON, command=hasher.whatever)
+removeDirButton.pack(side="bottom", fill="x")
+
+inputFrame.pack_propagate(0)
+inputFrame.pack(side="left", fill="both", expand=True)
+
+
+####--Output List Frame--####
+"""Right Frame."""
+outputFrame = tk.LabelFrame(root, fg=window.TEXT, bg=window.BACKGROUND, 
+  labelanchor="n", text="Hasher")
+
+outputFrame.pack(side="right", fill="both", expand=True)
 
 ####--Start GUI Loop--####
 
@@ -96,6 +109,7 @@ hashFunction.trace("w", functionCallback)
 def start(function="SHA3-256"):
   hashFunction.set(function.upper())
   root.title(f"Hash GUI ({function})")
+  root.config(menu=menuBar)
   root.mainloop()
 
 """Start the tkinter main loop if __name__ == "__main__"."""
