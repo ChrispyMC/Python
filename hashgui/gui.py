@@ -76,26 +76,29 @@ statusBar = tk.Label(root, text="No items selected.", relief="sunken", anchor="w
 inputFrame = tk.LabelFrame(root, fg=window.TEXT, bg=window.BACKGROUND, 
   labelanchor="n", text="File/Directory Selection")
 
+#Add to Listbox Buttons
 inputDirButton = tk.Button(inputFrame, text="Open Directory", font=("Helvetica", window.BUTTONTEXTSIZE), 
-  bg=window.BUTTONLIGHT, command=hasher.whatever)
+  bg=window.BUTTONLIGHT, command=hasher.test)
 inputDirButton.pack(side="top", fill="x")
 
-inputFileButton = tk.Button(inputFrame, text="Open Files", font=("Helvetica", window.BUTTONTEXTSIZE), bg=window.BUTTONLIGHT, command=hasher.whatever)
+inputFileButton = tk.Button(inputFrame, text="Open Files", font=("Helvetica", window.BUTTONTEXTSIZE), bg=window.BUTTONLIGHT, command=hasher.test)
 inputFileButton.pack(side="top", fill="x")
 
-#Listbox Widget
+#Listbox widget
+inputListbox = tk.Listbox(inputFrame, fg=window.TEXT, bg=window.BACKGROUND)
+inputListbox.pack(side="top", fill="both", expand=True)
 
+#Remove from Listbox Buttons
 removeFileButton = tk.Button(inputFrame, text="Remove File", font=("Helvetica", window.BUTTONTEXTSIZE), 
-  fg=window.TEXT, bg=window.BUTTON, command=hasher.whatever)
+  fg=window.TEXT, bg=window.BUTTON, command=lambda inputListbox=inputListbox: inputListbox.delete(tk.ANCHOR))
 removeFileButton.pack(side="bottom", fill="x")
 
 removeDirButton = tk.Button(inputFrame, text="Remove Directory", font=("Helvetica", window.BUTTONTEXTSIZE), 
-  fg=window.TEXT, bg=window.BUTTON, command=hasher.whatever)
+  fg=window.TEXT, bg=window.BUTTON, command=hasher.test)
 removeDirButton.pack(side="bottom", fill="x")
 
 inputFrame.pack_propagate(False)
 inputFrame.pack(side="left", fill="both", expand=True)
-
 
 ####--Output List Frame--####
 """Right Frame."""
