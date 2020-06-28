@@ -1,4 +1,4 @@
-# Python
+# Christopher Ying's Python Projects
 *I guess I can call myself "Chris.py."*
 Repository of my Python projects.
 
