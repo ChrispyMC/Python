@@ -35,14 +35,16 @@ class Menubar:
     self.fileMenu.add_command(label="Open Directory", command=self.test_command)
     self.fileMenu.add_separator()
     self.fileMenu.add_command(label="Exit", command=self.master.quit)
-    self.menubar.add_cascade(label="File", menu=self.fileMenu)
 
     self.hashMenu = tk.Menu(self.menubar, tearoff=0)
     self.hashMenu.add_command(label="Hash Input", command=hasher.test)
+
+    self.menubar.add_cascade(label="File", menu=self.fileMenu)
     self.menubar.add_cascade(label="Hash", menu=self.hashMenu)
   
   def test_command(self):
     print("oi, josuke?")
+
 
 class HashGUI:
   def __init__(self, master, function="SHA3-256"):
@@ -50,7 +52,7 @@ class HashGUI:
     self.master.geometry(window.GEOMETRY)
     self.master.title(f"Hash GUI ({function.upper()})")
     self.master.iconbitmap(os.path.dirname(os.path.realpath(__file__)) + "/" + window.ICON)
-    self.master.resizable(False, False)
+    self.master.resizable()
     self.master.config(bg=window.BACKGROUND)
 
     self.menubar = Menubar(self.master)
