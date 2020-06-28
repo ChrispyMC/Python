@@ -33,12 +33,8 @@ parser.add_argument("--directory", help="Pass in a (relative) directory to the h
 args = parser.parse_args()
 
 def run():
-  if args.help:
-    print("Available hashing functions:\n" + available)
-    sys.exit(0)
   if args.file is not None:
-    print(args.function + ":")
-    print(hash_file(filename=args.file, function=args.function))
+    print(args.function + ":\n" + hash_file(filename=args.file, function=args.function))
     sys.exit(0)
   main(function=args.function)
 
