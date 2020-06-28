@@ -1,8 +1,9 @@
 # Hash GUI
+*A user interface for hashlib's hash functions.*
 
 To start Hash GUI from the command-line, type:
 
-> python3 -m hashgui [-h] [-f FUNCTION]
+> python3 -m hashgui [-h] [-f FUNCTION] [--file FILE]
 
 List of available functions:
 
