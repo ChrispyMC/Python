@@ -1,4 +1,4 @@
-# Hash GUI - A user interface for hashlib's hash functions.
+# Hash GUI – A user interface for hashlib's hash functions.
 
 To start Hash GUI from the command-line, type:
 
