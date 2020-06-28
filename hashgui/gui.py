@@ -53,11 +53,12 @@ class OptionMenu:
     self.hashOption.trace("w", self.set_title)
 
     self.optionmenu = tk.OptionMenu(self.master, self.hashOption, *HASH_OPTIONS)
-    self.optionmenu.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE))
+    self.optionmenu.config(fg=window.TEXT, bg=window.BUTTON, activebackground=window.BUTTONLIGHT, font=("Helvetica", window.BUTTONTEXTSIZE))
 
   def set_title(self, *args):
     self.master.title(f"Hash GUI ({self.hashOption.get()})")
     print ("Set function to {}.".format(self.hashOption.get()))
+
 
 class HashGUI:
   def __init__(self, master, function="SHA3-256"):
@@ -74,6 +75,7 @@ class HashGUI:
     self.optionmenu = OptionMenu(self.master)
     self.optionmenu.hashOption.set(function)
     self.optionmenu.optionmenu.pack(side="top", fill="x")
+
 
 def main(function="SHA3-256"):
   root = tk.Tk()
