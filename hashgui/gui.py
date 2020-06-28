@@ -54,9 +54,12 @@ class HashGUI:
     self.master.config(bg=window.BACKGROUND)
 
     self.menubar = Menubar(self.master)
-    self.master.config(menu=self.menubar)
-
-if __name__ == "__main__":
+    self.master.config(menu=self.menubar.menubar)
+    
+def main(function="SHA3-256"):
   root = tk.Tk()
   gui = HashGUI(root)
   root.mainloop()
+
+if __name__ == "__main__":
+  main()
