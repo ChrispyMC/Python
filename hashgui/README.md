@@ -22,5 +22,5 @@ List of available functions:
   * SHA3-384
   * SHA3-512
 * SHAKE
-  * SHAKE128
-  * SHAKE256
+  * SHAKE-128
+  * SHAKE-256
