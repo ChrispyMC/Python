@@ -10,7 +10,7 @@ class Window:
   LABELTEXTSIZE = 10
   BUTTONTEXTSIZE = 12
   #Assets
-  ICON = "/icon.ico"
+  ICON = "icon.ico"
   BACKGROUND = "#2F2F2F"
   TEXT = "#FFFFFF"
   LABEL = "#303030"

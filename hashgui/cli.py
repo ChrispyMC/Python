@@ -1,5 +1,5 @@
 import argparse
-from hashgui.gui import start
+from hashgui.gui import HashGUI
 
 parser = argparse.ArgumentParser(description="Select files or directories to hash using a Tkinter GUI.")
 
@@ -8,7 +8,7 @@ parser.add_argument("-f" , "--function", help="Provide the hash function used.",
 args = parser.parse_args()
 
 def run():
-  start(function=args.function)
+  HashGUI.start(function=args.function)
 
 if __name__ == "__main__":
   run()

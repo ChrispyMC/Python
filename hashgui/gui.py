@@ -13,14 +13,6 @@ except ImportError:
 resources = references.Resources()
 window = references.Window()
 
-root = tk.Tk()
-root.iconbitmap(os.path.dirname(os.path.abspath(__file__))+window.ICON)
-root.geometry(window.GEOMETRY)
-root.configure(bg=window.BACKGROUND)
-root.resizable(False, False)
-
-####--Hash Function Options--####
-
 """Options for hash functions."""
 hashOptions = [
   "MD5",
@@ -33,90 +25,38 @@ hashOptions = [
   "SHAKE512"
 ]
 
-####--Menu Bar--####
+class Menubar:
+  def __init__(self, master):
+    self.master = master
+    self.menubar = tk.Menu(self.master)
 
-"""Menu commands."""
-def test():
-  print("what")
+    self.fileMenu = tk.Menu(self.menubar, tearoff=0)
+    self.fileMenu.add_command(label="Open File", command=self.test_command)
+    self.fileMenu.add_command(label="Open Directory", command=self.test_command)
+    self.fileMenu.add_separator()
+    self.fileMenu.add_command(label="Exit", command=self.master.quit)
+    self.menubar.add_cascade(label="File", menu=self.fileMenu)
 
-"""Menu."""
-menuBar = tk.Menu(root)
+    self.hashMenu = tk.Menu(self.menubar, tearoff=0)
+    self.hashMenu.add_command(label="Hash Input", command=hasher.test)
+    self.menubar.add_cascade(label="Hash", menu=self.hashMenu)
+  
+  def test_command(self):
+    print("oi, josuke?")
 
-fileMenu = tk.Menu(menuBar, tearoff=0)
-fileMenu.add_command(label="Open File...", command=hasher.test)
-fileMenu.add_command(label="Open Directory...", command=test)
-fileMenu.add_separator()
-fileMenu.add_command(label="Quit", command=root.quit)
-menuBar.add_cascade(label="File", menu=fileMenu)
+class HashGUI:
+  def __init__(self, master, function="SHA3-256"):
+    self.master = master
+    self.master.geometry(window.GEOMETRY)
+    self.master.title(f"Hash GUI ({function.upper()})")
+    self.master.iconbitmap(os.path.dirname(os.path.realpath(__file__)) + "/" + window.ICON)
+    self.master.resizable(False, False)
+    self.master.config(bg=window.BACKGROUND)
 
-hashMenu = tk.Menu(menuBar, tearoff=0)
-hashMenu.add_command(label="Hash Files", command=hasher.test)
-hashMenu.add_command(label="Hash Directories", command=test)
-menuBar.add_cascade(label="Hash", menu=hashMenu)
+    self.menubar = Menubar(self.master)
+    self.master.config(menu=self.menubar)
 
-"""Functions Menu."""
-hashFunction = tk.StringVar()
-changeFunction = tk.OptionMenu(root, hashFunction, *hashOptions)
-changeFunction.config(font=("Helvetica", window.BUTTONTEXTSIZE), fg=window.TEXT, bg=window.DROPDOWN)
-changeFunction.pack(side="top", fill="x")
-
-"""Change title on write."""
-def functionCallback(*args):
-  root.title(f"Hash GUI ({hashFunction.get()})")
-  print(f"Switched hash function to {hashFunction.get()}.")
-
-hashFunction.trace("w", functionCallback)
-
-####--Status Bar--####
-statusBar = tk.Label(root, text="No items selected.", relief="sunken", anchor="w", font=("Helvetica", window.LABELTEXTSIZE), bd=1, 
-  fg=window.TEXT, bg=window.LABEL).pack(side="bottom", fill="x")
-
-####--Input List Frame--####
-"""Left Frame."""
-inputFrame = tk.LabelFrame(root, fg=window.TEXT, bg=window.BACKGROUND, 
-  labelanchor="n", text="File/Directory Selection")
-
-#Add to Listbox Buttons
-inputDirButton = tk.Button(inputFrame, text="Open Directory", font=("Helvetica", window.BUTTONTEXTSIZE), 
-  bg=window.BUTTONLIGHT, command=hasher.test)
-inputDirButton.pack(side="top", fill="x")
-
-inputFileButton = tk.Button(inputFrame, text="Open Files", font=("Helvetica", window.BUTTONTEXTSIZE), bg=window.BUTTONLIGHT, command=hasher.test)
-inputFileButton.pack(side="top", fill="x")
-
-#Listbox widget
-inputListbox = tk.Listbox(inputFrame, fg=window.TEXT, bg=window.BACKGROUND)
-inputListbox.pack(side="top", fill="both", expand=True)
-
-#Remove from Listbox Buttons
-removeFileButton = tk.Button(inputFrame, text="Remove File", font=("Helvetica", window.BUTTONTEXTSIZE), 
-  fg=window.TEXT, bg=window.BUTTON, command=lambda inputListbox=inputListbox: inputListbox.delete(tk.ANCHOR))
-removeFileButton.pack(side="bottom", fill="x")
-
-removeDirButton = tk.Button(inputFrame, text="Remove Directory", font=("Helvetica", window.BUTTONTEXTSIZE), 
-  fg=window.TEXT, bg=window.BUTTON, command=hasher.test)
-removeDirButton.pack(side="bottom", fill="x")
-
-inputFrame.pack_propagate(False)
-inputFrame.pack(side="left", fill="both", expand=True)
-
-####--Output List Frame--####
-"""Right Frame."""
-outputFrame = tk.LabelFrame(root, fg=window.TEXT, bg=window.BACKGROUND, 
-  labelanchor="n", text="Hasher")
-
-outputFrame.pack(side="right", fill="both", expand=True)
-
-####--Start GUI Loop--####
-
-"""Start function."""
-def start(function="SHA3-256"):
-  hashFunction.set(function.upper())
-  root.title(f"Hash GUI ({function})")
-  root.config(menu=menuBar)
-  root.mainloop()
-
-"""Start the tkinter main loop if __name__ == "__main__"."""
 if __name__ == "__main__":
-  print(root.grid_size())
-  start()
+  root = tk.Tk()
+  gui = HashGUI(root)
+  root.mainloop()
