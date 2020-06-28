@@ -7,10 +7,20 @@ To start Hash GUI from the command-line, type:
 List of available functions:
 
 * MD5
-* SHA3
+* BLAKE
+  * BLAKE2B
+  * BLAKE2S
+* SHA-1
+* SHA-2
+  * SHA-224
+  * SHA-256
+  * SHA-384
+  * SHA-512
+* SHA-3
   * SHA3-224
   * SHA3-256
   * SHA3-384
   * SHA3-512
+* SHAKE
   * SHAKE128
-  * SHAKE512
+  * SHAKE256

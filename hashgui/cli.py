@@ -1,16 +1,45 @@
-import argparse
-try 
+import sys, argparse
+try:
   from gui import main
+  from hasher import hash_file
 except ImportError:
   from hashgui.gui import main
+  from hashgui.hasher import hash_file
 
-parser = argparse.ArgumentParser(description="Select files or directories to hash using a Tkinter GUI.")
+available = [
+  "BLAKE2B",
+  "BLAKE2S",
+  "MD5",
+  "SHA1",
+  "SHA-224",
+  "SHA-256",
+  "SHA-384",
+  "SHA-512",
+  "SHA3-224",
+  "SHA3-256",
+  "SHA3-384",
+  "SHA3-512",
+  "SHAKE-128",
+  "SHAKE-256"
+]
+
+parser = argparse.ArgumentParser(description="Select files or directories to hash using a Tkinter GUI.",
+  epilog=", ".join(available))
 
 parser.add_argument("-f" , "--function", help="Provide the hash function used.", default="SHA3-256")
+parser.add_argument("--file", help="Pass in an input file to the hasher.", default=None)
+parser.add_argument("--directory", help="Pass in a relative directory to the hasher.", default=None)
 
 args = parser.parse_args()
 
 def run():
+  if args.help:
+    print("Available hashing functions:\n" + available)
+    sys.exit(0)
+  if args.file is not None:
+    print(args.function + ":")
+    print(hash_file(filename=args.file, function=args.function))
+    sys.exit(0)
   main(function=args.function)
 
 if __name__ == "__main__":

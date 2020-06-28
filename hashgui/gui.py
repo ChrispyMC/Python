@@ -15,14 +15,26 @@ window = references.Window()
 
 """Options for hash functions."""
 HASH_OPTIONS = [
+  #MD5
   "MD5",
-  #SHA3
+  #SHA-3
   "SHA3-224",
   "SHA3-256",
   "SHA3-384",
   "SHA3-512",
-  "SHAKE128",
-  "SHAKE512"
+  #SHA-1
+  "SHA1",
+  #SHA-2
+  "SHA-224",
+  "SHA-256",
+  "SHA-384",
+  "SHA-512",
+  #SHAKE
+  "SHAKE-128",
+  "SHAKE-256",
+  #BLAKE
+  "BLAKE2B",
+  "BLAKE2S"
 ]
 
 class Menubar:
@@ -57,7 +69,7 @@ class OptionMenu:
 
   def set_title(self, *args):
     self.master.title(f"Hash GUI ({self.hashOption.get()})")
-    print ("Set function to {}.".format(self.hashOption.get()))
+    print ("Set function to {0}.".format(self.hashOption.get()))
 
 
 class HashGUI:
