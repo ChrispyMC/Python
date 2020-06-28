@@ -45,7 +45,7 @@ def hash_file(filename=None, function="SHA3-256"):
   return hasher.hexdigest()
 
 """
-def hash_directory(directory=None, function="SHA3-256"):
+def hash_directory(directory=None, function="SHA3-256", relative=True):
   if directory is None:
     print("No directory was given.")
     return False
@@ -59,5 +59,8 @@ def hash_directory(directory=None, function="SHA3-256"):
   else:
     hasher = get_function(function)
   
-  #for file in directory
+  if relative:
+    #for file in directory:
+  else:
+    #for file in directory (Convert with os.path.normpath())
 """

@@ -22,13 +22,13 @@ HASH_OPTIONS = [
   "SHA3-256",
   "SHA3-384",
   "SHA3-512",
-  #SHA-1
-  "SHA1",
   #SHA-2
   "SHA-224",
   "SHA-256",
   "SHA-384",
   "SHA-512",
+  #SHA-1
+  "SHA1",
   #SHAKE
   "SHAKE-128",
   "SHAKE-256",
@@ -43,13 +43,17 @@ class Menubar:
     self.menubar = tk.Menu(self.master)
 
     self.fileMenu = tk.Menu(self.menubar, tearoff=0)
-    self.fileMenu.add_command(label="Open File", command=self.test_command)
-    self.fileMenu.add_command(label="Open Directory", command=self.test_command)
+    self.fileMenu.add_command(label="Open File...", command=self.test_command)
+    self.fileMenu.add_command(label="Open Directory...", command=self.test_command)
     self.fileMenu.add_separator()
     self.fileMenu.add_command(label="Exit", command=self.master.quit)
 
     self.hashMenu = tk.Menu(self.menubar, tearoff=0)
-    self.hashMenu.add_command(label="Hash Input", command=hasher.test)
+    self.hashMenu.add_command(label="Hash Input Files", command=hasher.test)
+    self.hashMenu.add_command(label="Hash Input Directories", command=hasher.test)
+    self.hashMenu.add_separator()
+    self.hashMenu.add_command(label="Hash File...", command=hasher.test)
+    self.hashMenu.add_command(label="Hash Directory...", command=hasher.test)
 
     self.menubar.add_cascade(label="File", menu=self.fileMenu)
     self.menubar.add_cascade(label="Hash", menu=self.hashMenu)

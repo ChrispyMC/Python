@@ -28,7 +28,7 @@ parser = argparse.ArgumentParser(description="Select files or directories to has
 
 parser.add_argument("-f" , "--function", help="Provide the hash function used.", default="SHA3-256")
 parser.add_argument("--file", help="Pass in an input file to the hasher.", default=None)
-parser.add_argument("--directory", help="Pass in a relative directory to the hasher.", default=None)
+parser.add_argument("--directory", help="Pass in a (relative) directory to the hasher.", default=None)
 
 args = parser.parse_args()
 
