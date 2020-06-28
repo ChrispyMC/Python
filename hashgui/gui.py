@@ -14,7 +14,7 @@ resources = references.Resources()
 window = references.Window()
 
 """Options for hash functions."""
-hashOptions = [
+HASH_OPTIONS = [
   "MD5",
   #SHA3
   "SHA3-224",
@@ -46,18 +46,35 @@ class Menubar:
     print("oi, josuke?")
 
 
+class OptionMenu:
+  def __init__(self, master):
+    self.master = master
+    self.hashOption = tk.StringVar()
+    self.hashOption.trace("w", self.set_title)
+
+    self.optionmenu = tk.OptionMenu(self.master, self.hashOption, *HASH_OPTIONS)
+    self.optionmenu.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE))
+
+  def set_title(self, *args):
+    self.master.title(f"Hash GUI ({self.hashOption.get()})")
+    print ("Set function to {}.".format(self.hashOption.get()))
+
 class HashGUI:
   def __init__(self, master, function="SHA3-256"):
     self.master = master
     self.master.geometry(window.GEOMETRY)
     self.master.title(f"Hash GUI ({function.upper()})")
     self.master.iconbitmap(os.path.dirname(os.path.realpath(__file__)) + "/" + window.ICON)
-    self.master.resizable()
+    self.master.resizable(False, False)
     self.master.config(bg=window.BACKGROUND)
 
     self.menubar = Menubar(self.master)
     self.master.config(menu=self.menubar.menubar)
     
+    self.optionmenu = OptionMenu(self.master)
+    self.optionmenu.hashOption.set(function)
+    self.optionmenu.optionmenu.pack(side="top", fill="x")
+
 def main(function="SHA3-256"):
   root = tk.Tk()
   gui = HashGUI(root)
