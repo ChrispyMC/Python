@@ -6,7 +6,8 @@ except ImportError:
   from _template.gui import main
 """
 
-parser = argparse.ArgumentParser(description="A template for command-line interface & Tkinter GUI projects.")
+parser = argparse.ArgumentParser(description="A template for command-line interface & Tkinter GUI projects.",
+  prog="_template", epilog="Extra information can be put here. (Like a list of functions, for example.)")
 
 parser.add_argument("-c" , "--command", help="Command Description.", default="Default value.")
 

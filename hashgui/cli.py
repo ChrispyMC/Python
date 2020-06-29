@@ -24,17 +24,20 @@ available = [
 ]
 
 parser = argparse.ArgumentParser(description="Select files or directories to hash using a Tkinter GUI.",
-  epilog=", ".join(available))
+  prog="hashgui", epilog=", ".join(available))
 
+parser.add_argument("--version", action="version", version="Hash GUI 1.0")
 parser.add_argument("-f" , "--function", help="Provide the hash function used.", default="SHA3-256")
-parser.add_argument("--file", help="Pass in an input file to the hasher.", default=None)
+parser.add_argument("--file", help="Pass in an input file to the hasher.", action="append", default=None)
 parser.add_argument("--directory", help="Pass in a (relative) directory to the hasher.", default=None)
 
 args = parser.parse_args()
 
 def run():
   if args.file is not None:
-    print(args.function + ":\n" + hash_file(filename=args.file, function=args.function))
+    print(args.function)
+    for f in args.file:
+      print(f + " | " + hash_file(filename=f, function=args.function))
     sys.exit(0)
   main(function=args.function)
 
