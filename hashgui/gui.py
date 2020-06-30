@@ -76,8 +76,8 @@ class OptionMenu:
     self.optionmenu.config(fg=window.TEXT, bg=window.BUTTON, activebackground=window.BUTTONLIGHT, font=("Helvetica", window.BUTTONTEXTSIZE))
 
   def set_title(self, *args):
-    self.master.title(f"Hash GUI ({self.hashOption.get()})")
-    print ("Set function to {0}.".format(self.hashOption.get()))
+    self.master.title("Hash GUI (%s)" % self.hashOption.get())
+    print ("Set function to %s." % self.hashOption.get())
 
 
 class FileList:
@@ -104,7 +104,7 @@ class HashGUI:
   def __init__(self, master, function="SHA3-256"):
     self.master = master
     self.master.geometry(window.GEOMETRY)
-    self.master.title(f"Hash GUI ({function.upper()})")
+    self.master.title("Hash GUI (%s)" % function.upper())
     self.master.iconbitmap(os.path.dirname(os.path.realpath(__file__)) + "/" + window.ICON)
     self.master.resizable(False, False)
     self.master.config(bg=window.BACKGROUND)
