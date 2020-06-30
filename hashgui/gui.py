@@ -48,15 +48,19 @@ class Menubar:
     self.fileMenu.add_separator()
     self.fileMenu.add_command(label="Exit", command=self.master.quit)
 
-    self.hashMenu = tk.Menu(self.menubar, tearoff=0)
-    self.hashMenu.add_command(label="Hash Input Files", command=hasher.test)
-    self.hashMenu.add_command(label="Hash Input Directories", command=hasher.test)
-    self.hashMenu.add_separator()
-    self.hashMenu.add_command(label="Hash File...", command=hasher.test)
-    self.hashMenu.add_command(label="Hash Directory...", command=hasher.test)
+    self.editMenu = tk.Menu(self.menubar, tearoff=0)
+    self.editMenu.add_command(label="Themes", command=self.test_command)
+
+    self.toolsMenu = tk.Menu(self.menubar, tearoff=0)
+    self.toolsMenu.add_command(label="Hash File...", command=hasher.test)
+    self.toolsMenu.add_command(label="Hash Directory...", command=hasher.test)
+    self.toolsMenu.add_separator()
+    self.toolsMenu.add_command(label="Hash Input Files", command=hasher.test)
+    self.toolsMenu.add_command(label="Hash Input Directories", command=hasher.test)
 
     self.menubar.add_cascade(label="File", menu=self.fileMenu)
-    self.menubar.add_cascade(label="Hash", menu=self.hashMenu)
+    self.menubar.add_cascade(label="Edit", menu=self.editMenu)
+    self.menubar.add_cascade(label="Tools", menu=self.toolsMenu)
   
   def test_command(self):
     print("oi, josuke?")
@@ -76,6 +80,26 @@ class OptionMenu:
     print ("Set function to {0}.".format(self.hashOption.get()))
 
 
+class FileList:
+  def __init__(self, master):
+    self.master = master
+    self.listbox = tk.Listbox(self.master)
+    #Add code to set status bar to tk.ANCHOR text.
+
+class StatusBar:
+  def __init__(self, master):
+    self.master = master
+    self.frame = tk.Frame(height=window.LABELTEXTSIZE * 2, bd=1, bg=window.BUTTONLIGHT, relief="sunken")
+
+    self.selectionlabel = tk.Label(self.frame, text="Nothing selected.", 
+      font=("TkTextFont", window.LABELTEXTSIZE),  fg=window.BACKGROUND)
+    self.selectionlabel.pack(side="left")
+    
+    self.statisticslabel = tk.Label(self.frame, text="0 files, 0 directories", 
+      font=("TkTextFont", window.LABELTEXTSIZE), fg=window.BACKGROUND)
+    self.statisticslabel.pack(side="right")
+    #Add code to update the count of files and directories from FileList.listbox & DirectoryList.dirlist.
+    
 class HashGUI:
   def __init__(self, master, function="SHA3-256"):
     self.master = master
@@ -91,6 +115,9 @@ class HashGUI:
     self.optionmenu = OptionMenu(self.master)
     self.optionmenu.hashOption.set(function)
     self.optionmenu.optionmenu.pack(side="top", fill="x")
+
+    self.statusbar = StatusBar(self.master)
+    self.statusbar.frame.pack(side="bottom", fill="x")
 
 
 def main(function="SHA3-256"):
