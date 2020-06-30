@@ -13,8 +13,14 @@ resources = references.Resources()
 window = references.Window()
 wm = references.WindowMenu()
 
-def show():
+def file_hash():
   toplevel = tk.Toplevel()
   toplevel.geometry(wm.GEOMETRY)
   toplevel.title("Hash File")
+  toplevel.iconbitmap(os.path.dirname(os.path.realpath(__file__)) + "/" + window.ICON)
+
+def dir_hash():
+  toplevel = tk.Toplevel()
+  toplevel.geometry(wm.GEOMETRY)
+  toplevel.title("Hash Directory")
   toplevel.iconbitmap(os.path.dirname(os.path.realpath(__file__)) + "/" + window.ICON)

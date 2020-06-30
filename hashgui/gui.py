@@ -7,14 +7,14 @@ try:
   import references
   #import themes
   """External Toplevel windows."""
-  import filehash
+  import exthash
 except ImportError:
   """Program scripts/resources."""
   from hashgui import hasher
   from hashgui import references
   #from hashgui import themes
   """External Toplevel windows."""
-  from hashgui import filehash
+  from hashgui import exthash
 
 resources = references.Resources()
 window = references.Window()
@@ -58,8 +58,8 @@ class Menubar:
     self.editMenu.add_command(label="Themes", command=self.test_command)
 
     self.toolsMenu = tk.Menu(self.menubar, tearoff=0)
-    self.toolsMenu.add_command(label="Hash File...", command=filehash.show)
-    self.toolsMenu.add_command(label="Hash Directory...", command=filehash.show)
+    self.toolsMenu.add_command(label="Hash File...", command=exthash.file_hash)
+    self.toolsMenu.add_command(label="Hash Directory...", command=exthash.dir_hash)
     self.toolsMenu.add_separator()
     self.toolsMenu.add_command(label="Hash Input Files", command=hasher.test)
     self.toolsMenu.add_command(label="Hash Input Directories", command=hasher.test)
