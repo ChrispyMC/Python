@@ -29,3 +29,9 @@ class Window:
   #  "LABEL": "#303030",
   #  "BUTTON": "#5F5F5F",
   #  "DROPDOWN": "#505050"
+
+class WindowMenu:
+  #GEOMETRY
+  GEOMETRY = "720x480"
+  WIDTH = 720
+  HEIGHT = 480
