@@ -6,7 +6,7 @@ try:
   import hasher
   import references
   #import themes
-  """External Toplevel windows."""
+  """External Tk windows."""
   import exthash
 except ImportError:
   """Program scripts/resources."""
