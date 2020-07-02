@@ -5,7 +5,7 @@ def test():
 
 BUFFER_SIZE = 1024
 
-def get_function(function="SHA3-256"):
+def get_function(function="MD5"):
   return {
     "BLAKE2B": hashlib.blake2b(),
     "BLAKE2S": hashlib.blake2s(),
@@ -23,7 +23,7 @@ def get_function(function="SHA3-256"):
     "SHAKE-256": hashlib.shake_128()
   }.get(function.upper(), None)
 
-def hash_file(filename=None, function="SHA3-256"):
+def hash_file(filename=None, function="MD5"):
   if filename is None:
     print("No filename was given.")
     return False
@@ -44,8 +44,8 @@ def hash_file(filename=None, function="SHA3-256"):
       hasher.update(data)
   return hasher.hexdigest()
 
-"""
-def hash_directory(directory=None, function="SHA3-256", relative=True):
+"""Sort alphabetically using sorted(). | Figure out how to return hashes correctly.
+def hash_directory(directory=None, function="MD5"):
   if directory is None:
     print("No directory was given.")
     return False

@@ -32,6 +32,6 @@ class Window:
 
 class WindowMenu:
   #GEOMETRY
-  GEOMETRY = "720x480"
+  GEOMETRY = "640x360"
   WIDTH = 720
   HEIGHT = 480

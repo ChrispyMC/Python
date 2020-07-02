@@ -47,6 +47,8 @@ class Menubar:
   def __init__(self, master):
     self.master = master
     self.menubar = tk.Menu(self.master)
+    self.filehash = exthash.FileHash()
+    self.dirhash = exthash.DirHash()
 
     self.fileMenu = tk.Menu(self.menubar, tearoff=0)
     self.fileMenu.add_command(label="Open File...", command=self.test_command)
@@ -58,8 +60,8 @@ class Menubar:
     self.editMenu.add_command(label="Themes", command=self.test_command)
 
     self.toolsMenu = tk.Menu(self.menubar, tearoff=0)
-    self.toolsMenu.add_command(label="Hash File...", command=exthash.file_hash)
-    self.toolsMenu.add_command(label="Hash Directory...", command=exthash.dir_hash)
+    self.toolsMenu.add_command(label="Hash File...", command=self.filehash.show_file_window)
+    self.toolsMenu.add_command(label="Hash Directory...", command=self.dirhash.show_dir_window)
     self.toolsMenu.add_separator()
     self.toolsMenu.add_command(label="Hash Input Files", command=hasher.test)
     self.toolsMenu.add_command(label="Hash Input Directories", command=hasher.test)
@@ -93,6 +95,7 @@ class FileList:
     
   #Add code to set status bar to tk.ANCHOR text.
 
+
 class StatusBar:
   def __init__(self, master):
     self.master = master
@@ -108,8 +111,9 @@ class StatusBar:
   
   #Add code to update the count of files and directories from FileList.listbox & DirectoryList.dirlist.
     
+    
 class HashGUI:
-  def __init__(self, master, function="SHA3-256"):
+  def __init__(self, master, function="MD5"):
     self.master = master
     self.master.geometry(window.GEOMETRY)
     self.master.title("Hash GUI (%s)" % function.upper())
@@ -128,7 +132,7 @@ class HashGUI:
     self.statusbar.frame.pack(side="bottom", fill="x")
 
 
-def main(function="SHA3-256"):
+def main(function="MD5"):
   root = tk.Tk()
   gui = HashGUI(root)
   root.mainloop()

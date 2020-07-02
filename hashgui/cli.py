@@ -27,7 +27,7 @@ parser = argparse.ArgumentParser(description="Select files or directories to has
   prog="hashgui", epilog=", ".join(available))
 
 parser.add_argument("--version", action="version", version="Hash GUI 1.0")
-parser.add_argument("-f" , "--function", help="Provide the hash function used.", default="SHA3-256")
+parser.add_argument("-f" , "--function", help="Provide the hash function used.", default="MD5")
 parser.add_argument("--file", help="Pass in an input file to the hasher.", action="append", default=None)
 parser.add_argument("--directory", help="Pass in a (relative) directory to the hasher.", default=None)
 
