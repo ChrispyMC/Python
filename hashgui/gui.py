@@ -19,7 +19,7 @@ except ImportError:
 resources = references.Resources()
 window = references.Window()
 
-if os.environ.get("DISPLAY", "") == "":
+if sys.platform == "linux" and os.environ.get("DISPLAY", "") == "":
   print("No display found. Using :0.0")
   os.environ.__setitem__("DISPLAY", ":0.0")
 
