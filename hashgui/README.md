@@ -3,6 +3,7 @@
 To start Hash GUI from the command-line, type:
 
 ```console
+foo@bar:~$ 
 python3 -m hashgui [-h] [-f FUNCTION] [--file FILE]
 ```
 
@@ -26,3 +27,8 @@ List of available functions:
 * SHAKE
   * SHAKE-128
   * SHAKE-256
+
+Note: Use the command below to install tkinter.
+```console
+sudo apt-get install python3-tk
+```
