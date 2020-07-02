@@ -18,7 +18,7 @@ filenames, dirnames = [], []
 
 class FileHash:
   def __init__(self):
-    self.filenames = []
+    self.files = {}
 
   def show_file_window(self):
     self.master = tk.Toplevel()
@@ -28,20 +28,41 @@ class FileHash:
     self.master.resizable(False, False)
     self.master.config(bg=window.BACKGROUND)
 
-    self.label = tk.Label(self.master, text="No files selected.", fg=window.TEXT, bg=window.LABEL, 
-      font=("Helvetica", window.LABELTEXTSIZE))
-    self.label.pack(fill="x", side="top")
-    self.button = tk.Button(self.master, text="Add files", fg=window.TEXT, bg=window.BUTTON, command=self.open_files)
-    self.button.config(fg=window.TEXT, bg=window.BUTTON)
-    self.button.pack()
+    self.frame = tk.LabelFrame(self.master, text="No files selected.", fg=window.TEXT, bg=window.LABEL, 
+      font=("Helvetica", window.LABELTEXTSIZE), labelanchor="n", padx=5, pady=5)
+    self.frame.pack(side="top", fill="both", expand=True)
+
+    self.scrollbar = tk.Scrollbar(self.frame, orient="vertical")
+
+    self.listbox = tk.Listbox(self.frame, selectmode="extended", yscrollcommand=self.scrollbar.set)
+    self.listbox.pack(fill="x")
+
+    self.add = tk.Button(self.frame, text="Add files", command=self.open_files)
+    self.add.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=10)
+    self.add.pack(side="left", padx=50)
+
+    self.remove = tk.Button(self.frame, text="Remove files", command=self.remove_files)
+    self.remove.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=10)
+    self.remove.pack(side="right", padx=50)
 
   def open_files(self):
-    self.filenames.append(filedialog.askopenfiles(initialdir="/", title="Select Files", filetypes=[("All Files", "*.*")]))
-    self.label.config(text="%s files selected." % len(self.filenames))
-    print(self.filenames)
-    for f in self.filenames:
-      print(f)
+    files = filedialog.askopenfiles(initialdir="/", title="Select Files", filetypes=[("All Files", "*.*")])
+    for f in files:
+      if f not in self.listbox.get(0, "end"):
+        self.files[f.name] = f
+        self.listbox.insert("end", f.name)
+    print("Added %s to list." % ', '.join([f.name for f in files]))
+    self.frame.config(text="%s opened." % len(self.files))
 
+  def remove_files(self):
+    for i in list(self.listbox.curselection()):
+      try:
+        del self.files[self.listbox.get(i)]
+        self.listbox.delete(i)
+      except: pass #_tkinter.TclError
+    self.frame.config(text="%s opened." % self.listbox.size())
+    if self.listbox.size() < 1:
+      self.frame.config(text="No files opened.")
 
 class DirHash:
   def show_dir_window(self):
@@ -58,7 +79,7 @@ class DirHash:
 
     self.scrollbar = tk.Scrollbar(self.frame, orient="vertical")
 
-    self.listbox = tk.Listbox(self.frame, yscrollcommand=self.scrollbar.set)
+    self.listbox = tk.Listbox(self.frame, selectmode="single", yscrollcommand=self.scrollbar.set)
     self.listbox.pack(fill="x")
 
     self.add = tk.Button(self.frame, text="Add directory", command=self.open_directory)
@@ -80,6 +101,6 @@ class DirHash:
   
   def remove_directory(self):
     self.listbox.delete(tk.ANCHOR)
-    self.frame.config(text="%s selected." % self.listbox.size())
+    self.frame.config(text="%s opened." % self.listbox.size())
     if self.listbox.size() < 1:
-      self.frame.config(text="No directories selected.")
+      self.frame.config(text="No directories opened.")
