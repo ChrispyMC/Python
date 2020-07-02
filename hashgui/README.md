@@ -2,7 +2,7 @@
 
 To start Hash GUI from the command-line, type:
 
-```sh
+```console
 python3 -m hashgui [-h] [-f FUNCTION] [--file FILE]
 ```
 
