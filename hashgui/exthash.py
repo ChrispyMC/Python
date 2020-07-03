@@ -28,7 +28,7 @@ class FileHash:
     self.master.resizable(False, False)
     self.master.config(bg=window.BACKGROUND)
 
-    self.frame = tk.LabelFrame(self.master, text="No files selected.", fg=window.TEXT, bg=window.LABEL, 
+    self.frame = tk.LabelFrame(self.master, text="No files opened.", fg=window.TEXT, bg=window.LABEL, 
       font=("Helvetica", window.LABELTEXTSIZE), labelanchor="n", padx=5, pady=5)
     self.frame.pack(side="top", fill="both", expand=True)
 
@@ -65,6 +65,7 @@ class FileHash:
       self.frame.config(text="No files opened.")
 
 class DirHash:
+  #Change listbox selectmode to "extended" to allow for multiselection.
   def show_dir_window(self):
     self.master = tk.Toplevel()
     self.master.geometry(wm.GEOMETRY)
@@ -73,28 +74,36 @@ class DirHash:
     self.master.resizable(False, False)
     self.master.config(bg=window.BACKGROUND)
 
-    self.frame = tk.LabelFrame(self.master, text="No directories selected.", fg=window.TEXT, bg=window.LABEL, 
+    self.frame = tk.LabelFrame(self.master, text="No directories opened.", fg=window.TEXT, bg=window.LABEL, 
       font=("Helvetica", window.LABELTEXTSIZE), labelanchor="n", padx=5, pady=5)
     self.frame.pack(side="top", fill="both", expand=True)
 
     self.scrollbar = tk.Scrollbar(self.frame, orient="vertical")
 
     self.listbox = tk.Listbox(self.frame, selectmode="single", yscrollcommand=self.scrollbar.set)
-    self.listbox.pack(fill="x")
+    self.listbox.pack(side="top", fill="x")
 
     self.add = tk.Button(self.frame, text="Add directory", command=self.open_directory)
-    self.add.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=10)
-    self.add.pack(side="left", padx=50)
+    self.add.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=15)
+    self.add.pack(side="left", fill="x", padx=30)
 
     self.remove = tk.Button(self.frame, text="Remove directory", command=self.remove_directory)
-    self.remove.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=10)
-    self.remove.pack(side="right", padx=50)
+    self.remove.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=15)
+    self.remove.pack(side="right", fill="x", padx=30)
+    
+    self.hash_selected = tk.Button(self.frame, text="Hash selected", command=self.remove_directory)
+    self.hash_selected.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=20)
+    self.hash_selected.pack(side="top", pady=20)
+
+    self.hash_opened = tk.Button(self.frame, text="Hash!", command=self.remove_directory)
+    self.hash_opened.config(fg=window.TEXT, bg=window.BUTTONCTA, font=("Helvetica", window.BUTTONTEXTSIZE), padx=50)
+    self.hash_opened.pack(side="bottom", pady=10)
   
   def open_directory(self):
     directory = filedialog.askdirectory()
     if directory not in self.listbox.get(0, "end"):
       self.listbox.insert("end", directory)
-      self.frame.config(text="%s selected." % self.listbox.size())
+      self.frame.config(text="%s opened." % self.listbox.size())
       print("Added %s to list." % directory)
     else:
       print("%s is already in list." % directory)

@@ -15,6 +15,7 @@ class Window:
   TEXT = "#FFFFFF"
   LABEL = "#303030"
   BUTTON = "#5F5F5F"
+  BUTTONCTA = "#60A060"
   BUTTONLIGHT = "#F0F0F0"
   DROPDOWN = "#505050"
   #Light Colours
@@ -33,5 +34,5 @@ class Window:
 class WindowMenu:
   #GEOMETRY
   GEOMETRY = "640x360"
-  WIDTH = 720
-  HEIGHT = 480
+  WIDTH = 640
+  HEIGHT = 360
