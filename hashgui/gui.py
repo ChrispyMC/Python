@@ -92,10 +92,50 @@ class OptionMenu:
     print ("Set function to %s." % self.hashOption.get())
 
 
-class FileList:
+class HashList:
   def __init__(self, master):
     self.master = master
-    self.listbox = tk.Listbox(self.master)
+    self.frame = tk.Frame(bg=window.BACKGROUND, padx=10, pady=5)
+    self.dictionary = {}
+    
+    """
+    * Individual files should be added to the base dictionary.
+    * Directories make a new key (Directory Path) with a dictionary value
+      * This dictionary will hold the file key-value pairs (Display name-IOWrapper Object) in the directory
+      * Users should be able to add/remove files to hash from the directory.
+    """
+
+    self.scrollbar = tk.Scrollbar(self.frame, orient="vertical")
+
+    self.listbox = tk.Listbox(self.frame, selectmode="extended", yscrollcommand=self.scrollbar.set)
+    self.listbox.pack(fill="both", anchor="n", pady=5)
+
+    self.add = tk.Button(self.frame, text="Add files", command=self.open_files)
+    self.add.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
+    self.add.pack(fill="x", anchor="s")
+
+    self.remove = tk.Button(self.frame, text="Remove files", command=self.remove_files)
+    self.remove.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
+    self.remove.pack(fill="x", anchor="s")
+  
+  def open_files(self):
+    files = filedialog.askopenfiles(initialdir="/", title="Select Files", filetypes=[("All Files", "*.*")])
+    for f in files:
+      if f not in self.listbox.get(0, "end"):
+        self.dictionary[f.name] = f
+        self.listbox.insert("end", f.name)
+    print("Added %s to list." % ', '.join([f.name for f in files]))
+    #self.frame.config(text="%s opened." % len(self.files))
+
+  def remove_files(self):
+    for i in list(self.listbox.curselection()):
+      try:
+        del self.files[self.listbox.get(i)]
+        self.listbox.delete(i)
+      except: pass #_tkinter.TclError
+    #self.frame.config(text="%s opened." % len(self.files))
+    #if self.listbox.size() < 1:
+    #  self.frame.config(text="No files opened.")
     
   #Add code to set status bar to tk.ANCHOR text.
 
@@ -113,7 +153,7 @@ class StatusBar:
       font=("TkCaptionFont", window.LABELTEXTSIZE), fg=window.BACKGROUND)
     self.statisticsLabel.pack(side="right")
   
-  #Add code to update the count of files and directories from FileList.listbox & DirectoryList.dirlist.
+  #Add code to update the count of files and directories from len(FileList.files) & DirectoryList.dirlist.size()
     
     
 class HashGUI:
@@ -134,6 +174,9 @@ class HashGUI:
 
     self.statusbar = StatusBar(self.master)
     self.statusbar.frame.pack(side="bottom", fill="x")
+
+    self.filelist = FileList(self.master)
+    self.filelist.frame.pack(side="top", fill="x")
 
 
 def main(function="MD5"):
