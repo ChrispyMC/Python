@@ -103,6 +103,14 @@ class DirHash:
     self.listbox = tk.Listbox(self.frame, selectmode="single", yscrollcommand=self.scrollbar.set)
     self.listbox.pack(side="top", fill="x")
 
+    self.hashOption = tk.StringVar()
+    self.hashOption.trace("w", self.set_title)
+    self.hashOption.set(resources.HASH_OPTIONS[0])
+
+    self.optionmenu = tk.OptionMenu(self.frame, self.hashOption, *resources.HASH_OPTIONS)
+    self.optionmenu.config(fg=window.TEXT, bg=window.BUTTON, activebackground=window.BUTTONLIGHT, font=("Helvetica", window.BUTTONTEXTSIZE))
+    self.optionmenu.pack(side="top", fill="x", anchor="n")
+
     self.add = tk.Button(self.frame, text="Add directory", command=self.open_directory)
     self.add.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=15)
     self.add.pack(side="left", fill="x", padx=50)
@@ -133,3 +141,7 @@ class DirHash:
     self.frame.config(text="%s opened." % self.listbox.size())
     if self.listbox.size() < 1:
       self.frame.config(text="No directories opened.")
+
+  def set_title(self, *args):
+    self.master.title("Select files to hash (%s)" % self.hashOption.get())
+    print ("[Hash Directories] Set function to %s." % self.hashOption.get())
