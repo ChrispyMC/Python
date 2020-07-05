@@ -24,29 +24,7 @@ if sys.platform == "linux" and os.environ.get("DISPLAY", "") == "":
   print("No display found. Using :0.0")
   os.environ.__setitem__("DISPLAY", ":0.0")
 
-"""Options for hash functions."""
-HASH_OPTIONS = [
-  #MD5
-  "MD5",
-  #SHA-3
-  "SHA3-224",
-  "SHA3-256",
-  "SHA3-384",
-  "SHA3-512",
-  #SHA-2
-  "SHA-224",
-  "SHA-256",
-  "SHA-384",
-  "SHA-512",
-  #SHA-1
-  "SHA1",
-  #SHAKE
-  "SHAKE-128",
-  "SHAKE-256",
-  #BLAKE
-  "BLAKE2B",
-  "BLAKE2S"
-]
+"""Options for hash functions can be found in references.py."""
 
 class Menubar:
   def __init__(self, master):
@@ -56,8 +34,8 @@ class Menubar:
     self.dirhash = exthash.DirHash()
 
     self.fileMenu = tk.Menu(self.menubar, tearoff=0)
-    self.fileMenu.add_command(label="Open File...", command=self.test_command)
-    self.fileMenu.add_command(label="Open Directory...", command=self.test_command)
+    #self.fileMenu.add_command(label="Open File...", command=self.test_command)
+    #self.fileMenu.add_command(label="Open Directory...", command=self.test_command)
     self.fileMenu.add_separator()
     self.fileMenu.add_command(label="Exit", command=self.master.quit)
 
@@ -85,7 +63,7 @@ class OptionMenu:
     self.hashOption = tk.StringVar()
     self.hashOption.trace("w", self.set_title)
 
-    self.optionmenu = tk.OptionMenu(self.master, self.hashOption, *HASH_OPTIONS)
+    self.optionmenu = tk.OptionMenu(self.master, self.hashOption, *resources.HASH_OPTIONS)
     self.optionmenu.config(fg=window.TEXT, bg=window.BUTTON, activebackground=window.BUTTONLIGHT, font=("Helvetica", window.BUTTONTEXTSIZE))
 
   def set_title(self, *args):
