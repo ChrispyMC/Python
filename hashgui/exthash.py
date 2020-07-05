@@ -100,7 +100,7 @@ class DirHash:
 
     self.scrollbar = tk.Scrollbar(self.frame, orient="vertical")
 
-    self.listbox = tk.Listbox(self.frame, selectmode="single", yscrollcommand=self.scrollbar.set)
+    self.listbox = tk.Listbox(self.frame, selectmode="browse", yscrollcommand=self.scrollbar.set)
     self.listbox.pack(side="top", fill="x")
 
     self.hashOption = tk.StringVar()
