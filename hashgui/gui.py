@@ -1,5 +1,6 @@
 import io, os, sys
 import tkinter as tk
+from tkinter import filedialog
 
 try:
   """Program scripts/resources."""
@@ -95,29 +96,40 @@ class OptionMenu:
 class HashList:
   def __init__(self, master):
     self.master = master
-    self.frame = tk.Frame(bg=window.BACKGROUND, padx=10, pady=5)
+    self.list_frame = tk.Frame(bg=window.BACKGROUND, padx=10, pady=5)
+    self.button_frame = tk.Frame(bg=window.BACKGROUND, padx=10, pady=10)
     self.dictionary = {}
     
     """
     * Individual files should be added to the base dictionary.
     * Directories make a new key (Directory Path) with a dictionary value
-      * This dictionary will hold the file key-value pairs (Display name-IOWrapper Object) in the directory
+      * This dictionary will hold the file key-value pairs (Display name-IOWrapper Object) in the directory.
+      * Child files will be shown as just the file name (filename.split("/")[-1]) under the directory text.
+      * Child files can be reconstructed by prepending the parent key to the child string (file name).
       * Users should be able to add/remove files to hash from the directory.
+      * Selecting and deleting only the directory will delete all child files.
+      * Selecting and deleting the directory AND child files will move the remaining child files to the main root category.
     """
 
-    self.scrollbar = tk.Scrollbar(self.frame, orient="vertical")
+    self.scrollbar = tk.Scrollbar(self.list_frame, orient="vertical")
 
-    self.listbox = tk.Listbox(self.frame, selectmode="extended", yscrollcommand=self.scrollbar.set)
-    self.listbox.pack(fill="both", anchor="n", pady=5)
+    self.listbox = tk.Listbox(self.list_frame, selectmode="extended", yscrollcommand=self.scrollbar.set)
+    self.listbox.pack(fill="both", expand=True, anchor="n", pady=5)
 
-    self.add = tk.Button(self.frame, text="Add files", command=self.open_files)
-    self.add.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
-    self.add.pack(fill="x", anchor="s")
+    self.add_files = tk.Button(self.button_frame, text="Add files", command=self.open_files)
+    self.add_files.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
+    self.add_files.pack(fill="x", anchor="n")
 
-    self.remove = tk.Button(self.frame, text="Remove files", command=self.remove_files)
-    self.remove.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
-    self.remove.pack(fill="x", anchor="s")
+    self.remove_files = tk.Button(self.button_frame, text="Remove files", command=self.remove_files)
+    self.remove_files.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
+    self.remove_files.pack(fill="x", anchor="n")
   
+  """
+  def set_title(self):
+    if self.listbox.size() < 1:
+      self.frame.config(text="No files opened.")
+  """
+
   def open_files(self):
     files = filedialog.askopenfiles(initialdir="/", title="Select Files", filetypes=[("All Files", "*.*")])
     for f in files:
@@ -134,8 +146,6 @@ class HashList:
         self.listbox.delete(i)
       except: pass #_tkinter.TclError
     #self.frame.config(text="%s opened." % len(self.files))
-    #if self.listbox.size() < 1:
-    #  self.frame.config(text="No files opened.")
     
   #Add code to set status bar to tk.ANCHOR text.
 
@@ -175,8 +185,9 @@ class HashGUI:
     self.statusbar = StatusBar(self.master)
     self.statusbar.frame.pack(side="bottom", fill="x")
 
-    self.filelist = FileList(self.master)
-    self.filelist.frame.pack(side="top", fill="x")
+    self.hashlist = HashList(self.master)
+    self.hashlist.list_frame.pack(side="top", fill="both", expand=True)
+    self.hashlist.button_frame.pack(side="top", fill="both", expand=True)
 
 
 def main(function="MD5"):
