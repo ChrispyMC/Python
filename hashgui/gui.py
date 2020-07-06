@@ -1,19 +1,21 @@
-import io, os, sys
+import os
+import sys
 import tkinter as tk
+from tkinter import ttk
 from tkinter import filedialog
 
 try:
   """Program scripts/resources."""
   import hasher
   import references
-  #import themes
+  # import themes
   """External Tk windows."""
   import exthash
 except ImportError:
   """Program scripts/resources."""
   from hashgui import hasher
   from hashgui import references
-  #from hashgui import themes
+  # from hashgui import themes
   """External Toplevel windows."""
   from hashgui import exthash
 
@@ -26,6 +28,7 @@ if sys.platform == "linux" and os.environ.get("DISPLAY", "") == "":
 
 """Options for hash functions can be found in references.py."""
 
+
 class Menubar:
   def __init__(self, master):
     self.master = master
@@ -34,8 +37,8 @@ class Menubar:
     self.dirhash = exthash.DirHash()
 
     self.fileMenu = tk.Menu(self.menubar, tearoff=0)
-    #self.fileMenu.add_command(label="Open File...", command=self.test_command)
-    #self.fileMenu.add_command(label="Open Directory...", command=self.test_command)
+    # self.fileMenu.add_command(label="Open File...", command=self.test_command)
+    # self.fileMenu.add_command(label="Open Directory...", command=self.test_command)
     self.fileMenu.add_separator()
     self.fileMenu.add_command(label="Exit", command=self.master.quit)
 
@@ -52,7 +55,7 @@ class Menubar:
     self.menubar.add_cascade(label="File", menu=self.fileMenu)
     self.menubar.add_cascade(label="Edit", menu=self.editMenu)
     self.menubar.add_cascade(label="Tools", menu=self.toolsMenu)
-  
+
   def test_command(self):
     print("oi, josuke?")
 
@@ -64,11 +67,12 @@ class OptionMenu:
     self.hashOption.trace("w", self.set_title)
 
     self.optionmenu = tk.OptionMenu(self.master, self.hashOption, *resources.HASH_OPTIONS)
-    self.optionmenu.config(fg=window.TEXT, bg=window.BUTTON, activebackground=window.BUTTONLIGHT, font=("Helvetica", window.BUTTONTEXTSIZE))
+    self.optionmenu.config(fg=window.TEXT, bg=window.BUTTON, activebackground=window.BUTTONLIGHT,
+                           font=("Helvetica", window.BUTTONTEXTSIZE))
 
   def set_title(self, *args):
     self.master.title("Hash GUI (%s)" % self.hashOption.get())
-    print ("Set function to %s." % self.hashOption.get())
+    print("Set function to %s." % self.hashOption.get())
 
 
 class HashList:
@@ -77,7 +81,7 @@ class HashList:
     self.list_frame = tk.Frame(bg=window.BACKGROUND, padx=10, pady=5)
     self.button_frame = tk.Frame(bg=window.BACKGROUND, padx=10, pady=10)
     self.dictionary = {}
-    
+
     """
     * Individual files should be added to the base dictionary.
     * Directories make a new key (Directory Path) with a dictionary value
@@ -101,7 +105,7 @@ class HashList:
     self.remove_files = tk.Button(self.button_frame, text="Remove files", command=self.remove_files)
     self.remove_files.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
     self.remove_files.pack(fill="x", anchor="n")
-  
+
   """
   def set_title(self):
     if self.listbox.size() < 1:
@@ -115,17 +119,15 @@ class HashList:
         self.dictionary[f.name] = f
         self.listbox.insert("end", f.name)
     print("Added %s to list." % ', '.join([f.name for f in files]))
-    #self.frame.config(text="%s opened." % len(self.files))
+    # self.frame.config(text="%s opened." % len(self.files))
 
   def remove_files(self):
     for i in list(self.listbox.curselection()):
-      try:
-        del self.files[self.listbox.get(i)]
-        self.listbox.delete(i)
-      except: pass #_tkinter.TclError
-    #self.frame.config(text="%s opened." % len(self.files))
-    
-  #Add code to set status bar to tk.ANCHOR text.
+      del self.files[self.listbox.get(i)]
+      self.listbox.delete(i)
+    # self.frame.config(text="%s opened." % len(self.files))
+
+  # Add code to set status bar to tk.ANCHOR text.
 
 
 class StatusBar:
@@ -133,17 +135,17 @@ class StatusBar:
     self.master = master
     self.frame = tk.Frame(height=window.LABELTEXTSIZE * 2, bd=1, bg=window.BUTTONLIGHT, relief="sunken")
 
-    self.selectionLabel = tk.Label(self.frame, text="Nothing selected.", 
-      font=("TkCaptionFont", window.LABELTEXTSIZE),  fg=window.BACKGROUND)
+    self.selectionLabel = tk.Label(self.frame, text="Nothing selected.",
+                                   font=("TkCaptionFont", window.LABELTEXTSIZE), fg=window.BACKGROUND)
     self.selectionLabel.pack(side="left")
-    
-    self.statisticsLabel = tk.Label(self.frame, text="0 files, 0 directories", 
-      font=("TkCaptionFont", window.LABELTEXTSIZE), fg=window.BACKGROUND)
+
+    self.statisticsLabel = tk.Label(self.frame, text="0 files, 0 directories",
+                                    font=("TkCaptionFont", window.LABELTEXTSIZE), fg=window.BACKGROUND)
     self.statisticsLabel.pack(side="right")
-  
-  #Add code to update the count of files and directories from len(FileList.files) & DirectoryList.dirlist.size()
-    
-    
+
+  # Add code to update the count of files and directories from len(FileList.files) & DirectoryList.dirlist.size()
+
+
 class HashGUI:
   def __init__(self, master, function="MD5"):
     self.master = master
@@ -155,7 +157,7 @@ class HashGUI:
 
     self.menubar = Menubar(self.master)
     self.master.config(menu=self.menubar.menubar)
-    
+
     self.optionmenu = OptionMenu(self.master)
     self.optionmenu.hashOption.set(function)
     self.optionmenu.optionmenu.pack(side="top", fill="x")
@@ -172,6 +174,7 @@ def main(function="MD5"):
   root = tk.Tk()
   gui = HashGUI(root)
   root.mainloop()
+
 
 if __name__ == "__main__":
   main()

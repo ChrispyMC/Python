@@ -1,5 +1,5 @@
-#File Hash Toplevel window
-import io, os, sys
+# File Hash Toplevel window
+import os
 import tkinter as tk
 from tkinter import filedialog
 
@@ -16,6 +16,7 @@ wm = references.WindowMenu()
 
 filenames, dirnames = [], []
 
+
 class FileHash:
   def __init__(self):
     self.files = {}
@@ -28,8 +29,8 @@ class FileHash:
     self.master.resizable(False, False)
     self.master.config(bg=window.BACKGROUND)
 
-    self.frame = tk.LabelFrame(self.master, text="No files opened.", fg=window.TEXT, bg=window.LABEL, 
-      font=("Helvetica", window.LABELTEXTSIZE), labelanchor="n", padx=10, pady=5)
+    self.frame = tk.LabelFrame(self.master, text="No files opened.", fg=window.TEXT, bg=window.LABEL,
+                               font=("Helvetica", window.LABELTEXTSIZE), labelanchor="n", padx=10, pady=5)
     self.frame.pack(side="top", fill="both", expand=True)
 
     self.scrollbar = tk.Scrollbar(self.frame, orient="vertical")
@@ -42,7 +43,8 @@ class FileHash:
     self.hashOption.set(resources.HASH_OPTIONS[0])
 
     self.optionmenu = tk.OptionMenu(self.frame, self.hashOption, *resources.HASH_OPTIONS)
-    self.optionmenu.config(fg=window.TEXT, bg=window.BUTTON, activebackground=window.BUTTONLIGHT, font=("Helvetica", window.BUTTONTEXTSIZE))
+    self.optionmenu.config(fg=window.TEXT, bg=window.BUTTON, activebackground=window.BUTTONLIGHT,
+                           font=("Helvetica", window.BUTTONTEXTSIZE))
     self.optionmenu.pack(side="top", fill="x", anchor="n")
 
     self.add = tk.Button(self.frame, text="Add files", command=self.open_files)
@@ -52,7 +54,7 @@ class FileHash:
     self.remove = tk.Button(self.frame, text="Remove files", command=self.remove_files)
     self.remove.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=15)
     self.remove.pack(side="right", fill="x", padx=50)
-    
+
     self.hash_selected = tk.Button(self.frame, text="Hash selected", command=self.remove_files)
     self.hash_selected.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=20)
     self.hash_selected.pack(side="top", pady=20)
@@ -72,30 +74,30 @@ class FileHash:
 
   def remove_files(self):
     for i in list(self.listbox.curselection()):
-      try:
-        del self.files[self.listbox.get(i)]
-        self.listbox.delete(i)
-      except: pass #_tkinter.TclError
+      del self.files[self.listbox.get(i)]
+      self.listbox.delete(i)
     self.frame.config(text="%s opened." % len(self.files))
     if self.listbox.size() < 1:
       self.frame.config(text="No files opened.")
 
   def set_title(self, *args):
     self.master.title("Select files to hash (%s)" % self.hashOption.get())
-    print ("[Hash Files] Set function to %s." % self.hashOption.get())
+    print("[Hash Files] Set function to %s." % self.hashOption.get())
+
 
 class DirHash:
-  #Change listbox selectmode to "extended" to allow for multiselection.
+  # Change listbox selectmode to "extended" to allow for multiselection.
   def show_dir_window(self):
     self.master = tk.Toplevel()
     self.master.geometry(wm.GEOMETRY)
     self.master.title("Select directories to hash")
-    self.master.iconbitmap(os.path.dirname(os.path.realpath(__file__)) + "/" + window.ICON)
+    self.master.iconbitmap(os.path.dirname(os.path.realpath(__file__)) + window.ICON)
     self.master.resizable(False, False)
     self.master.config(bg=window.BACKGROUND)
 
-    self.frame = tk.LabelFrame(self.master, text="No directories opened.", fg=window.TEXT, bg=window.LABEL, 
-      font=("Helvetica", window.LABELTEXTSIZE), labelanchor="n", padx=10, pady=5)
+    self.frame = tk.LabelFrame(self.master, text="No directories opened.")
+    self.frame.config(fg=window.TEXT, bg=window.LABEL, font=("Helvetica", window.LABELTEXTSIZE),
+                      labelanchor="n", padx=10, pady=5)
     self.frame.pack(side="top", fill="both", expand=True)
 
     self.scrollbar = tk.Scrollbar(self.frame, orient="vertical")
@@ -118,7 +120,7 @@ class DirHash:
     self.remove = tk.Button(self.frame, text="Remove directory", command=self.remove_directory)
     self.remove.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=15)
     self.remove.pack(side="right", fill="x", padx=50)
-    
+
     self.hash_selected = tk.Button(self.frame, text="Hash selected", command=self.remove_directory)
     self.hash_selected.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=20)
     self.hash_selected.pack(side="top", pady=20)
@@ -126,7 +128,7 @@ class DirHash:
     self.hash_opened = tk.Button(self.frame, text="Hash!", command=self.remove_directory)
     self.hash_opened.config(fg=window.TEXT, bg=window.BUTTONCTA, font=("Helvetica", window.BUTTONTEXTSIZE), padx=50)
     self.hash_opened.pack(side="bottom", pady=10)
-  
+
   def open_directory(self):
     directory = filedialog.askdirectory()
     if directory not in self.listbox.get(0, "end"):
@@ -135,7 +137,7 @@ class DirHash:
       print("Added %s to list." % directory)
     else:
       print("%s is already in list." % directory)
-  
+
   def remove_directory(self):
     self.listbox.delete(tk.ANCHOR)
     self.frame.config(text="%s opened." % self.listbox.size())
@@ -144,4 +146,4 @@ class DirHash:
 
   def set_title(self, *args):
     self.master.title("Select files to hash (%s)" % self.hashOption.get())
-    print ("[Hash Directories] Set function to %s." % self.hashOption.get())
+    print("[Hash Directories] Set function to %s." % self.hashOption.get())
