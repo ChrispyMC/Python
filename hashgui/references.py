@@ -22,8 +22,7 @@ class Resources:
       "SHAKE-256",
       # BLAKE
       "BLAKE2B",
-      "BLAKE2S"
-  ]
+      "BLAKE2S"]
 
 
 class Window:

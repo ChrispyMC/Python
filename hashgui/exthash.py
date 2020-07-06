@@ -7,7 +7,7 @@ try:
   import hasher
   import references
 except ImportError:
-  from hashgui import hasher
+  from hashgui import hasher  # noqa: F401
   from hashgui import references
 
 resources = references.Resources()

@@ -1,7 +1,7 @@
 import os
 import sys
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk  # noqa: F401
 from tkinter import filedialog
 
 try:
@@ -172,7 +172,7 @@ class HashGUI:
 
 def main(function="MD5"):
   root = tk.Tk()
-  gui = HashGUI(root)
+  gui = HashGUI(root)  # noqa: F841
   root.mainloop()
 
 
