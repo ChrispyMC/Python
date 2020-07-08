@@ -12,7 +12,7 @@ exclude =
 # it's not a bug that we aren't using all of hacking, ignore:
 # E111: indentation is not a multiple of 4
 # E114: indentation is not a multiple of 4 (comment)
-# E501: Line too long (N > 79 characters)
+# E501: Line is too long (N > 79 characters)
 # F812: list comprehension redefines ...
 # H101: Use TODO(NAME)
 # H233: Python 3.x incompatible use of print operator

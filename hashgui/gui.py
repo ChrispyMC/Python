@@ -1,7 +1,7 @@
 import os
 import sys
 import tkinter as tk
-from tkinter import ttk  # noqa: F401
+from tkinter import ttk
 from tkinter import filedialog
 
 try:
@@ -37,13 +37,13 @@ class Menubar:
     self.dirhash = exthash.DirHash()
 
     self.fileMenu = tk.Menu(self.menubar, tearoff=0)
-    # self.fileMenu.add_command(label="Open File...", command=self.test_command)
-    # self.fileMenu.add_command(label="Open Directory...", command=self.test_command)
+    self.fileMenu.add_command(label="Open File...", command=self.placeholder)
+    self.fileMenu.add_command(label="Open Directory...", command=self.placeholder)
     self.fileMenu.add_separator()
     self.fileMenu.add_command(label="Exit", command=self.master.quit)
 
     self.editMenu = tk.Menu(self.menubar, tearoff=0)
-    self.editMenu.add_command(label="Themes", command=self.test_command)
+    self.editMenu.add_command(label="Themes", command=self.placeholder)
 
     self.toolsMenu = tk.Menu(self.menubar, tearoff=0)
     self.toolsMenu.add_command(label="Hash File...", command=self.filehash.show_file_window)
@@ -56,8 +56,11 @@ class Menubar:
     self.menubar.add_cascade(label="Edit", menu=self.editMenu)
     self.menubar.add_cascade(label="Tools", menu=self.toolsMenu)
 
-  def test_command(self):
+  def placeholder(self):
     print("oi, josuke?")
+
+  def update(self, menu, index, command):
+    menu.entryconfigure(index, command=command)
 
 
 class OptionMenu:
@@ -75,10 +78,10 @@ class OptionMenu:
     print("Set function to %s." % self.hashOption.get())
 
 
-class HashList:
+class HashTree:
   def __init__(self, master):
     self.master = master
-    self.list_frame = tk.Frame(bg=window.BACKGROUND, padx=10, pady=5)
+    self.tree_frame = tk.Frame(bg=window.BACKGROUND, padx=10, pady=5)
     self.button_frame = tk.Frame(bg=window.BACKGROUND, padx=10, pady=10)
     self.dictionary = {}
 
@@ -93,41 +96,75 @@ class HashList:
       * Selecting and deleting the directory AND child files will move the remaining child files to the main root category.
     """
 
-    self.scrollbar = tk.Scrollbar(self.list_frame, orient="vertical")
+    self.treeview = ttk.Treeview(self.tree_frame, selectmode="browse")
+    self.scrollbar = ttk.Scrollbar(self.tree_frame, orient="vertical", command=self.treeview.yview)
+    self.treeview.config(yscrollcommand=self.scrollbar.set)
+    self.treeview.pack(fill="both", expand=True, anchor="n", pady=5)
 
-    self.listbox = tk.Listbox(self.list_frame, selectmode="extended", yscrollcommand=self.scrollbar.set)
-    self.listbox.pack(fill="both", expand=True, anchor="n", pady=5)
+    self.treeview["columns"] = ("1", "2", "3")
+    self.treeview["show"] = "headings"
+
+    self.treeview.heading("1", text="Name")
+    self.treeview.column("1", width=int(window.WIDTH / 2), minwidth=int(window.WIDTH / 8), anchor='c')
+    self.treeview.heading("2", text="Type")
+    self.treeview.column("2", width=int(window.WIDTH / 8), minwidth=int(window.WIDTH / 8), anchor='c')
+    self.treeview.heading("3", text="Size")
+    self.treeview.column("3", width=int(window.WIDTH / 8), minwidth=int(window.WIDTH / 8), anchor='c')
+
+    self.treeview.bind('<<TreeviewSelect>>', self.on_select)
 
     self.add_files = tk.Button(self.button_frame, text="Add files", command=self.open_files)
     self.add_files.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
     self.add_files.pack(fill="x", anchor="n")
 
-    self.remove_files = tk.Button(self.button_frame, text="Remove files", command=self.remove_files)
+    self.remove_files = tk.Button(self.button_frame, text="Remove files", command=self.test)
     self.remove_files.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
     self.remove_files.pack(fill="x", anchor="n")
 
-  """
-  def set_title(self):
-    if self.listbox.size() < 1:
-      self.frame.config(text="No files opened.")
-  """
+  def test(self):
+    print("test")
 
   def open_files(self):
     files = filedialog.askopenfiles(initialdir="/", title="Select Files", filetypes=[("All Files", "*.*")])
+    """
+    1) Consult list of opened directories and add file as a child if opened.
+    2) Consult list of opened files and create new parent if both parent directories match. (string.split("/"))
+    3) If none apply, add file under root parent.
+
+    import os
+    os.path.getsize("C:\\Python27\\Lib\\genericpath.py")
+    Raises OSError if the file does not exist or is inaccessible.
+    """
     for f in files:
-      if f not in self.listbox.get(0, "end"):
+      if f not in self.treeview.get_children():
+        filesize = os.path.getsize(os.path.realpath(f.name))
         self.dictionary[f.name] = f
-        self.listbox.insert("end", f.name)
+        # Add above logic
+        self.treeview.insert("", "end", text=f.name, values=(f.name, "File", str(filesize) + " bytes"))
     print("Added %s to list." % ', '.join([f.name for f in files]))
     # self.frame.config(text="%s opened." % len(self.files))
 
   def remove_files(self):
+    pass
+    """
     for i in list(self.listbox.curselection()):
       del self.files[self.listbox.get(i)]
       self.listbox.delete(i)
+    """
     # self.frame.config(text="%s opened." % len(self.files))
 
-  # Add code to set status bar to tk.ANCHOR text.
+  def on_select(self, event):
+    self.selected = event.widget.selection()
+
+  def get_selection(self):
+    try:
+      for idx in self.selected:
+        print(self.treeview.item(idx, option="text"))
+    except AttributeError:
+      pass
+
+  def get_statistics(self):
+    pass
 
 
 class StatusBar:
@@ -139,10 +176,15 @@ class StatusBar:
                                    font=("TkCaptionFont", window.LABELTEXTSIZE), fg=window.BACKGROUND)
     self.selectionLabel.pack(side="left")
 
-    self.statisticsLabel = tk.Label(self.frame, text="0 files, 0 directories",
+    self.statisticsLabel = tk.Label(self.frame, text="0 files, 0 directories.",
                                     font=("TkCaptionFont", window.LABELTEXTSIZE), fg=window.BACKGROUND)
     self.statisticsLabel.pack(side="right")
 
+  def set_left(self, text="Nothing selected."):
+    self.selectionLabel.config(text=text)
+
+  def set_right(self, text="0 files, 0 directories."):
+    self.statisticsLabel.config(text=text)
   # Add code to update the count of files and directories from len(FileList.files) & DirectoryList.dirlist.size()
 
 
@@ -165,9 +207,18 @@ class HashGUI:
     self.statusbar = StatusBar(self.master)
     self.statusbar.frame.pack(side="bottom", fill="x")
 
-    self.hashlist = HashList(self.master)
-    self.hashlist.list_frame.pack(side="top", fill="both", expand=True)
-    self.hashlist.button_frame.pack(side="top", fill="both", expand=True)
+    self.hashtree = HashTree(self.master)
+    self.hashtree.tree_frame.pack(side="top", fill="both", expand=True)
+    self.hashtree.button_frame.pack(side="top", fill="both", expand=True)
+
+    self.master.bind('<<TreeviewSelect>>', self.hashtree.get_selection())
+
+    # self.hashtree.get_selection() returns string to input into self.statusbar.set_(left/right).
+
+    self.menubar.update(menu=self.menubar.fileMenu, index=0, command=lambda: self.hashtree.open_files())
+
+    # Add code to set status bar to item text of treeview.
+    # Add code to update the count of files and directories from treeview, sorted by type. ("file" or, "directory")
 
 
 def main(function="MD5"):
