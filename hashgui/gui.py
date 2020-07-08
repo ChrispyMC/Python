@@ -96,7 +96,7 @@ class HashTree:
       * Selecting and deleting the directory AND child files will move the remaining child files to the main root category.
     """
 
-    self.treeview = ttk.Treeview(self.tree_frame, selectmode="browse")
+    self.treeview = ttk.Treeview(self.tree_frame, selectmode="extended")
     self.scrollbar = ttk.Scrollbar(self.tree_frame, orient="vertical", command=self.treeview.yview)
     self.treeview.config(yscrollcommand=self.scrollbar.set)
     self.treeview.pack(fill="both", expand=True, anchor="n", pady=5)
@@ -111,7 +111,7 @@ class HashTree:
     self.treeview.heading("3", text="Size")
     self.treeview.column("3", width=int(window.WIDTH / 8), minwidth=int(window.WIDTH / 8), anchor='c')
 
-    self.treeview.bind('<<TreeviewSelect>>', self.on_select)
+    # <<TreeviewSelect>> bind is a part of the HashGUI class.
 
     self.add_files = tk.Button(self.button_frame, text="Add files", command=self.open_files)
     self.add_files.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
@@ -142,7 +142,6 @@ class HashTree:
         # Add above logic
         self.treeview.insert("", "end", text=f.name, values=(f.name, "File", str(filesize) + " bytes"))
     print("Added %s to list." % ', '.join([f.name for f in files]))
-    # self.frame.config(text="%s opened." % len(self.files))
 
   def remove_files(self):
     pass
@@ -151,17 +150,6 @@ class HashTree:
       del self.files[self.listbox.get(i)]
       self.listbox.delete(i)
     """
-    # self.frame.config(text="%s opened." % len(self.files))
-
-  def on_select(self, event):
-    self.selected = event.widget.selection()
-
-  def get_selection(self):
-    try:
-      for idx in self.selected:
-        print(self.treeview.item(idx, option="text"))
-    except AttributeError:
-      pass
 
   def get_statistics(self):
     pass
@@ -180,12 +168,11 @@ class StatusBar:
                                     font=("TkCaptionFont", window.LABELTEXTSIZE), fg=window.BACKGROUND)
     self.statisticsLabel.pack(side="right")
 
-  def set_left(self, text="Nothing selected."):
+  def set_left(self, text="Use StatusBar.set_left(text=\"Text.\") to modify this label."):
     self.selectionLabel.config(text=text)
 
-  def set_right(self, text="0 files, 0 directories."):
+  def set_right(self, text="Use StatusBar.set_right(text=\"Text.\") to modify this label."):
     self.statisticsLabel.config(text=text)
-  # Add code to update the count of files and directories from len(FileList.files) & DirectoryList.dirlist.size()
 
 
 class HashGUI:
@@ -211,14 +198,24 @@ class HashGUI:
     self.hashtree.tree_frame.pack(side="top", fill="both", expand=True)
     self.hashtree.button_frame.pack(side="top", fill="both", expand=True)
 
-    self.master.bind('<<TreeviewSelect>>', self.hashtree.get_selection())
-
+    # Using <Button-1> because I can't figure out how to attach the correct binding to master or treeview.
+    self.hashtree.treeview.bind("<<TreeviewSelect>>", self.get_selection)
     # self.hashtree.get_selection() returns string to input into self.statusbar.set_(left/right).
 
     self.menubar.update(menu=self.menubar.fileMenu, index=0, command=lambda: self.hashtree.open_files())
 
-    # Add code to set status bar to item text of treeview.
     # Add code to update the count of files and directories from treeview, sorted by type. ("file" or, "directory")
+
+  def get_selection(self, event):
+    selected = event.widget.selection()
+    items = []
+    try:
+      for i in selected:
+        items.append(self.hashtree.treeview.item(i)["text"])
+      # print("Selected " + ", ".join(items))
+      self.statusbar.set_left("Selected " + ", ".join(items))
+    except AttributeError:
+      self.statusbar.set_left("Nothing selected.")
 
 
 def main(function="MD5"):
