@@ -106,11 +106,11 @@ class HashTree:
     self.treeview["columns"] = ("1", "2", "3")
     self.treeview["show"] = "headings"
 
-    self.treeview.heading("1", text="Name")
+    self.treeview.heading("1", text="Name", command=lambda: self.sort_column(self.treeview, "1", False))
     self.treeview.column("1", width=int(window.WIDTH / 2), minwidth=int(window.WIDTH / 8), anchor='c')
-    self.treeview.heading("2", text="Type")
+    self.treeview.heading("2", text="Type", command=lambda: self.sort_column(self.treeview, "2", False))
     self.treeview.column("2", width=int(window.WIDTH / 8), minwidth=int(window.WIDTH / 8), anchor='c')
-    self.treeview.heading("3", text="Size")
+    self.treeview.heading("3", text="Size", command=lambda: self.sort_column(self.treeview, "3", False))
     self.treeview.column("3", width=int(window.WIDTH / 8), minwidth=int(window.WIDTH / 8), anchor='c')
 
     # <<TreeviewSelect>> bind is a part of the HashGUI class.
@@ -156,6 +156,22 @@ class HashTree:
 
   def get_statistics(self):
     pass
+
+  def sort_column(self, tree, col, reverse):
+    # Get items in the tree
+    li = [(tree.set(k, col), k) for k in tree.get_children('')]
+    li.sort(key=lambda t: t[0], reverse=reverse)
+
+    # Rearrange items in sorted positions.
+    for index, (val, k) in enumerate(li):
+      tree.move(k, '', index)
+
+    # Reverse column sort next time.
+    tree.heading(col, command=lambda: self.sort_column(tree, col, not reverse))
+
+    # Print debug text.
+    text = f"Sorted column {col} ascending." if not reverse else f"Sorted column {col} descending."
+    print(text)
 
 
 class StatusBar:
