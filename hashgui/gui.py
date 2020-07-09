@@ -57,9 +57,11 @@ class Menubar:
     self.menubar.add_cascade(label="Tools", menu=self.toolsMenu)
 
   def placeholder(self):
+    """Used for menu items that will be updated in the HashGUI class."""
     print("oi, josuke?")
 
   def update(self, menu, index, command):
+    """Update the command of a menu (inheriting from self.menubar)."""
     menu.entryconfigure(index, command=command)
 
 
@@ -122,11 +124,11 @@ class HashTree:
     self.remove_files.pack(fill="x", anchor="n")
 
   def test(self):
+    """Placeholder command."""
     print("test")
 
   def open_files(self):
-    files = filedialog.askopenfiles(initialdir="/", title="Select Files", filetypes=[("All Files", "*.*")])
-    """
+    """Open a list of files and run it through a series of tests.
     1) Consult list of opened directories and add file as a child if opened.
     2) Consult list of opened files and create new parent if both parent directories match. (string.split("/"))
     3) If none apply, add file under root parent.
@@ -135,6 +137,7 @@ class HashTree:
     os.path.getsize("C:\\Python27\\Lib\\genericpath.py")
     Raises OSError if the file does not exist or is inaccessible.
     """
+    files = filedialog.askopenfiles(initialdir="/", title="Select Files", filetypes=[("All Files", "*.*")])
     for f in files:
       if f not in self.treeview.get_children():
         filesize = os.path.getsize(os.path.realpath(f.name))
@@ -198,9 +201,7 @@ class HashGUI:
     self.hashtree.tree_frame.pack(side="top", fill="both", expand=True)
     self.hashtree.button_frame.pack(side="top", fill="both", expand=True)
 
-    # Using <Button-1> because I can't figure out how to attach the correct binding to master or treeview.
     self.hashtree.treeview.bind("<<TreeviewSelect>>", self.get_selection)
-    # self.hashtree.get_selection() returns string to input into self.statusbar.set_(left/right).
 
     self.menubar.update(menu=self.menubar.fileMenu, index=0, command=lambda: self.hashtree.open_files())
 
