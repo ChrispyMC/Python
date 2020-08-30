@@ -65,20 +65,24 @@ class FileHash:
 
   def open_files(self):
     files = filedialog.askopenfiles(initialdir="/", title="Select Files", filetypes=[("All Files", "*.*")])
+    added = []
     for f in files:
-      if f not in self.listbox.get(0, "end"):
+      if f not in self.listbox.get(0, "end") and f.name not in self.files:
         self.files[f.name] = f
         self.listbox.insert("end", f.name)
-    print("Added %s to list." % ', '.join([f.name for f in files]))
-    self.frame.config(text="%s opened." % len(self.files))
+        added.append(f)
+    if added:
+      print("[Hash Files] Added %s to list." % ', '.join([f.name for f in added]))
+      self.frame.config(text="%s opened." % len(self.files))
 
   def remove_files(self):
-    for i in list(self.listbox.curselection()):
+    # Fix multiple item removal not working. Gives KeyError: '' on Line 81.
+    for i in self.listbox.curselection():
       del self.files[self.listbox.get(i)]
       self.listbox.delete(i)
-    self.frame.config(text="%s opened." % len(self.files))
+    self.frame.config(text="No files opened.")
     if self.listbox.size() < 1:
-      self.frame.config(text="No files opened.")
+      self.frame.config(text="%s opened." % len(self.files))
 
   def set_title(self, *args):
     self.master.title("Select files to hash (%s)" % self.hashOption.get())
@@ -86,6 +90,9 @@ class FileHash:
 
 
 class DirHash:
+  def __init__(self):
+    self.directories = set()
+
   # Change listbox selectmode to "extended" to allow for multiselection.
   def show_dir_window(self):
     self.master = tk.Toplevel()
@@ -131,19 +138,21 @@ class DirHash:
 
   def open_directory(self):
     directory = filedialog.askdirectory()
-    if directory not in self.listbox.get(0, "end"):
+    if directory and directory not in self.listbox.get(0, "end") and directory not in self.directories:
+      self.directories.add(directory)
       self.listbox.insert("end", directory)
       self.frame.config(text="%s opened." % self.listbox.size())
-      print("Added %s to list." % directory)
+      print("[Hash Directories] Added %s to list." % directory)
     else:
-      print("%s is already in list." % directory)
+      print("[Hash Directories] %s is already in list." % directory)
 
   def remove_directory(self):
+    self.directories.discard(self.listbox.get(tk.ANCHOR))
     self.listbox.delete(tk.ANCHOR)
     self.frame.config(text="%s opened." % self.listbox.size())
     if self.listbox.size() < 1:
       self.frame.config(text="No directories opened.")
 
   def set_title(self, *args):
-    self.master.title("Select files to hash (%s)" % self.hashOption.get())
+    self.master.title("Select directories to hash (%s)" % self.hashOption.get())
     print("[Hash Directories] Set function to %s." % self.hashOption.get())

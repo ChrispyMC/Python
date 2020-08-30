@@ -4,11 +4,7 @@ import hashlib
 BUFFER_SIZE = 1024
 
 
-def test():
-  print("Test!")
-
-
-def get_function(function="MD5"):
+def get_function(function):
   return {
       "BLAKE2B": hashlib.blake2b(),
       "BLAKE2S": hashlib.blake2s(),
@@ -67,5 +63,5 @@ def hash_directory(directory=None, function="MD5"):
   if relative:
     #for file in directory:
   else:
-    #for file in directory (Convert with os.path.normpath())
+    #for file in directory:  # (Convert with os.path.normpath())
 """

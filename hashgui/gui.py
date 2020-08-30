@@ -13,7 +13,7 @@ try:
   import exthash
 except ImportError:
   """Program scripts/resources."""
-  from hashgui import hasher
+  from hashgui import hasher  # noqa: F401
   from hashgui import references
   # from hashgui import themes
   """External Toplevel windows."""
@@ -49,8 +49,8 @@ class Menubar:
     self.toolsMenu.add_command(label="Hash File...", command=self.filehash.show_file_window)
     self.toolsMenu.add_command(label="Hash Directory...", command=self.dirhash.show_dir_window)
     self.toolsMenu.add_separator()
-    self.toolsMenu.add_command(label="Hash Input Files", command=hasher.test)
-    self.toolsMenu.add_command(label="Hash Input Directories", command=hasher.test)
+    self.toolsMenu.add_command(label="Hash Input Files", command=self.placeholder)
+    self.toolsMenu.add_command(label="Hash Input Directories", command=self.placeholder)
 
     self.menubar.add_cascade(label="File", menu=self.fileMenu)
     self.menubar.add_cascade(label="Edit", menu=self.editMenu)
@@ -58,11 +58,11 @@ class Menubar:
 
   def placeholder(self):
     """Used for menu items that will be updated in the HashGUI class."""
-    print("oi, josuke?")
+    print("Oi, Josuke! I deleted the menu command.")
 
-  def update(self, menu, index, command):
-    """Update the command of a menu (inheriting from self.menubar)."""
-    menu.entryconfigure(index, command=command)
+  def update(self, menu, index, **options):
+    """Update a menu (inheriting from self.menubar)."""
+    menu.entryconfigure(index, **options)
 
 
 class OptionMenu:
@@ -87,17 +87,6 @@ class HashTree:
     self.button_frame = tk.Frame(bg=window.BACKGROUND, padx=10, pady=10)
     self.dictionary = {}
 
-    """
-    * Individual files should be added to the base dictionary.
-    * Directories make a new key (Directory Path) with a dictionary value
-      * This dictionary will hold the file key-value pairs (Display name-IOWrapper Object) in the directory.
-      * Child files will be shown as just the file name (filename.split("/")[-1]) under the directory text.
-      * Child files can be reconstructed by prepending the parent key to the child string (file name).
-      * Users should be able to add/remove files to hash from the directory.
-      * Selecting and deleting only the directory will delete all child files.
-      * Selecting and deleting the directory AND child files will move the remaining child files to the main root category.
-    """
-
     self.treeview = ttk.Treeview(self.tree_frame, selectmode="extended")
     self.scrollbar = ttk.Scrollbar(self.tree_frame, orient="vertical", command=self.treeview.yview)
     self.treeview.config(yscrollcommand=self.scrollbar.set)
@@ -119,7 +108,7 @@ class HashTree:
     self.add_files.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
     self.add_files.pack(fill="x", anchor="n")
 
-    self.remove_files = tk.Button(self.button_frame, text="Remove files", command=self.test)
+    self.remove_files = tk.Button(self.button_frame, text="Remove files", command=self.remove_files)
     self.remove_files.config(fg=window.TEXT, bg=window.BUTTON, font=("Helvetica", window.BUTTONTEXTSIZE), padx=5)
     self.remove_files.pack(fill="x", anchor="n")
 
@@ -128,43 +117,33 @@ class HashTree:
     print("test")
 
   def open_files(self):
-    """Open a list of files and run it through a series of tests.
-    1) Consult list of opened directories and add file as a child if opened.
-    2) Consult list of opened files and create new parent if both parent directories match. (string.split("/"))
-    3) If none apply, add file under root parent.
-
-    import os
-    os.path.getsize("C:\\Python27\\Lib\\genericpath.py")
-    Raises OSError if the file does not exist or is inaccessible.
-    """
+    """Add a list of files to the treeview widget."""
     files = filedialog.askopenfiles(initialdir="/", title="Select Files", filetypes=[("All Files", "*.*")])
+    added = []
     for f in files:
-      if f not in self.treeview.get_children():
+      if f not in self.treeview.get_children() and f.name not in self.dictionary:
         filesize = os.path.getsize(os.path.realpath(f.name))
-        self.dictionary[f.name] = f
-        # Add above logic
         self.treeview.insert("", "end", text=f.name, values=(f.name, "File", str(filesize) + " bytes"))
-    print("Added %s to list." % ', '.join([f.name for f in files]))
+        self.dictionary[f.name] = f
+        added.append(f)
+    if added:
+      print("Added %s to list." % ', '.join([f.name for f in added]))
 
   def remove_files(self):
-    pass
-    """
-    for i in list(self.listbox.curselection()):
-      del self.files[self.listbox.get(i)]
-      self.listbox.delete(i)
-    """
-
-  def get_statistics(self):
-    pass
+    """Find & remove items selected from the treeview."""
+    for i in self.treeview.selection():
+      del self.dictionary[self.treeview.item(i, "values")[0]]
+      self.treeview.delete(i)
 
   def sort_column(self, tree, col, reverse):
+    """Sort column ascending/descending."""
     # Get items in the tree
-    li = [(tree.set(k, col), k) for k in tree.get_children('')]
-    li.sort(key=lambda t: t[0], reverse=reverse)
+    lst = [(tree.set(k, col), k) for k in tree.get_children('')]
+    lst.sort(key=lambda t: t[0], reverse=reverse)
 
     # Rearrange items in sorted positions.
-    for index, (val, k) in enumerate(li):
-      tree.move(k, '', index)
+    for index, (val, k) in enumerate(lst):
+      tree.move(k, "", index)
 
     # Reverse column sort next time.
     tree.heading(col, command=lambda: self.sort_column(tree, col, not reverse))
@@ -172,6 +151,15 @@ class HashTree:
     # Print debug text.
     text = f"Sorted column {col} ascending." if not reverse else f"Sorted column {col} descending."
     print(text)
+
+  def get_statistics(self):
+    files, directories = 0, 0
+    for i in self.treeview.get_children():
+      if self.treeview.item(i, "values")[1] == "File":
+        files += 1
+      else:
+        directories += 1
+    return (files, directories)
 
 
 class StatusBar:
@@ -188,9 +176,11 @@ class StatusBar:
     self.statisticsLabel.pack(side="right")
 
   def set_left(self, text="Use StatusBar.set_left(text=\"Text.\") to modify this label."):
+    """Set the selection (left) status bar label."""
     self.selectionLabel.config(text=text)
 
   def set_right(self, text="Use StatusBar.set_right(text=\"Text.\") to modify this label."):
+    """Set the statistics (right) status bar label."""
     self.statisticsLabel.config(text=text)
 
 
@@ -217,22 +207,27 @@ class HashGUI:
     self.hashtree.tree_frame.pack(side="top", fill="both", expand=True)
     self.hashtree.button_frame.pack(side="top", fill="both", expand=True)
 
-    self.hashtree.treeview.bind("<<TreeviewSelect>>", self.get_selection)
+    self.hashtree.treeview.bind("<<TreeviewSelect>>", self.treeview_select)
 
     self.menubar.update(menu=self.menubar.fileMenu, index=0, command=lambda: self.hashtree.open_files())
 
     # Add code to update the count of files and directories from treeview, sorted by type. ("file" or, "directory")
 
-  def get_selection(self, event):
+  def treeview_select(self, event):
+    """Update the statusbar after a selection has been made."""
+    # Get the selection and update the selection (left) bar.
     selected = event.widget.selection()
     items = []
     try:
       for i in selected:
         items.append(self.hashtree.treeview.item(i)["text"])
-      # print("Selected " + ", ".join(items))
       self.statusbar.set_left("Selected " + ", ".join(items))
     except AttributeError:
       self.statusbar.set_left("Nothing selected.")
+
+    # Get the treeview's item statistics and update the statistics (right) bar.
+    statistics = self.hashtree.get_statistics()
+    self.statusbar.set_right(text="{0} files, {1} directories.".format(statistics[0], statistics[1]))
 
 
 def main(function="MD5"):

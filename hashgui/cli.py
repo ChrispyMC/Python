@@ -9,8 +9,6 @@ except ImportError:
   from hashgui.hasher import hash_file
 
 available = [
-    "BLAKE2B",
-    "BLAKE2S",
     "MD5",
     "SHA1",
     "SHA-224",
@@ -22,11 +20,12 @@ available = [
     "SHA3-384",
     "SHA3-512",
     "SHAKE-128",
-    "SHAKE-256"
-]
+    "SHAKE-256",
+    "BLAKE2B",
+    "BLAKE2S"]
 
-parser = argparse.ArgumentParser(description="Select files or directories to hash using a Tkinter GUI.", prog="hashgui",
-                                 epilog=", ".join(available))
+parser = argparse.ArgumentParser(description="Select files or directories to hash using a Tkinter GUI.",
+                                 prog="hashgui", epilog=", ".join(available))
 
 parser.add_argument("--version", action="version", version="Hash GUI 1.0")
 parser.add_argument("-f", "--function", help="Provide the hash function used.", default="MD5")
